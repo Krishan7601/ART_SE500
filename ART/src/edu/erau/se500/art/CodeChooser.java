@@ -1,3 +1,5 @@
+package edu.erau.se500.art;
+
 import java.io.File;
 import java.util.List;
 import javafx.application.Application;

@@ -1,3 +1,5 @@
+package edu.erau.se500.art;
+
 import java.io.File;
 import javafx.application.Application;
 import javafx.stage.FileChooser;
