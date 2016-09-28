@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
-public class MainView extends ViewPart {
+public class SelectView extends ViewPart {
 	
 	public static final String ID = "edu.erau.se500.art.MainView";
 	

@@ -23,7 +23,7 @@
       </category>
       <view
             category="edu.erau.se500.art"
-            class="edu.erau.se500.art.MainView"
+            class="edu.erau.se500.art.SelectView"
             icon="icons/sample.png"
             id="edu.erau.se500.art.MainView"
             name="ART - Requirement Traceability">
