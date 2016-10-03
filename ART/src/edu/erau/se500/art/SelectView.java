@@ -80,7 +80,7 @@ public class SelectView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dlg = new DirectoryDialog(btnBrowseProject.getShell());
-				dlg.setText("Select Java Project Folder");
+				dlg.setText("Select Java Project");
 				String path = dlg.open();
 				if (path == null) return;
 				lblFilenameProject.setText(path);
@@ -117,7 +117,7 @@ public class SelectView extends ViewPart {
 		});
 	    
 	    grpCode.pack();
-	        
+	    
 		Button btnCompute = new Button(mainPanel, SWT.PUSH);
 		btnCompute.setText("Compute");
 		btnCompute.pack();
