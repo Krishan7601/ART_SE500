@@ -18,6 +18,8 @@ public class SelectView extends ViewPart {
 	
 	public static final String ID = "edu.erau.se500.art.MainView";
 	
+	//test comment
+	
 	Composite mainPanel;
 	
 	File umlFile, javaFile, projectDirectory;
