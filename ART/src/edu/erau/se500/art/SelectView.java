@@ -8,7 +8,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+<<<<<<< HEAD
 import org.eclipse.swt.widgets.DirectoryDialog;
+=======
+>>>>>>> refs/remotes/origin/master
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
