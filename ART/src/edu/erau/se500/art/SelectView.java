@@ -1,9 +1,15 @@
 package edu.erau.se500.art;
 
+import java.io.File;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
@@ -14,9 +20,11 @@ public class SelectView extends ViewPart {
 	
 	Composite mainPanel;
 	
-	public void createPartControl(Composite parent) {
+	File umlFile, javaFile, projectDirectory;
+	
+	public void createPartControl(Composite mainPanel) {
 		
-		mainPanel = parent;
+		this.mainPanel = mainPanel;
 	    
 	    RowLayout overallLayout = new RowLayout ();
 		overallLayout.type = SWT.VERTICAL;
@@ -31,10 +39,23 @@ public class SelectView extends ViewPart {
 		lblFilenameUML.setText("FilenameGoesHere.xml");
 		lblFilenameUML.pack();
 		
-		Button btnBrowseUML = new Button(grpUML, SWT.NONE);
+		Button btnBrowseUML = new Button(grpUML, SWT.PUSH);
 		btnBrowseUML.setText("Browse");
 		btnBrowseUML.setLocation(200, 20);
 		btnBrowseUML.pack();
+		btnBrowseUML.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog dlg = new FileDialog(btnBrowseUML.getShell(),  SWT.OPEN  );
+				dlg.setText("Select Class Diagram");
+				final String[] allowedExtensions = {"*.xml"};
+				dlg.setFilterExtensions(allowedExtensions);
+				String path = dlg.open();
+				if (path == null) return;
+				lblFilenameUML.setText(dlg.getFileName());
+				umlFile = new File(path);
+			}
+		});
 		
 		grpUML.pack();
 
@@ -51,10 +72,21 @@ public class SelectView extends ViewPart {
 		lblFilenameProject.setText("ProjectNameGoesHere");
 		lblFilenameProject.pack();
 		
-		Button btnBrowseProject = new Button(grpCode, SWT.NONE);
+		Button btnBrowseProject = new Button(grpCode, SWT.PUSH);
 		btnBrowseProject.setText("Browse");
 		btnBrowseProject.setLocation(200, 40);
 		btnBrowseProject.pack();
+		btnBrowseProject.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				DirectoryDialog dlg = new DirectoryDialog(btnBrowseProject.getShell());
+				dlg.setText("Select Java Project Folder");
+				String path = dlg.open();
+				if (path == null) return;
+				lblFilenameProject.setText(path);
+				projectDirectory = new File(path);
+			}
+		});
 	    
 	    Button btnSingleRadio = new Button(grpCode, SWT.RADIO);
 	    btnSingleRadio.setLocation(10, 70);
@@ -66,12 +98,29 @@ public class SelectView extends ViewPart {
 		lblFilenameSingle.setText("FilenameGoesHere.java");
 		lblFilenameSingle.pack();
 		
-		Button btnBrowseSingle = new Button(grpCode, SWT.NONE);
+		Button btnBrowseSingle = new Button(grpCode, SWT.PUSH);
 		btnBrowseSingle.setText("Browse");
 		btnBrowseSingle.setLocation(200, 90);
 		btnBrowseSingle.pack();
+		btnBrowseSingle.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog dlg = new FileDialog(btnBrowseSingle.getShell(),  SWT.OPEN  );
+				dlg.setText("Select Java File");
+				final String[] allowedExtensions = {"*.java"};
+				dlg.setFilterExtensions(allowedExtensions);
+				String path = dlg.open();
+				if (path == null) return;
+				lblFilenameSingle.setText(dlg.getFileName());
+				javaFile = new File(path);
+			}
+		});
 	    
 	    grpCode.pack();
+	        
+		Button btnCompute = new Button(mainPanel, SWT.PUSH);
+		btnCompute.setText("Compute");
+		btnCompute.pack();
 	}
 	
 	public void setFocus() {
