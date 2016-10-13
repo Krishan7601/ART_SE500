@@ -16,13 +16,13 @@ import org.eclipse.ui.part.ViewPart;
 
 public class SelectView extends ViewPart {
 	
-	public static final String ID = "edu.erau.se500.art.MainView";
-	
-	//test comment
+	public static final String ID = "edu.erau.se500.art.SelectView";
 	
 	Composite mainPanel;
-	
 	File umlFile, javaFile, projectDirectory;
+	Button btnProjectRadio, btnSingleRadio;
+	Label lblFilenameProject, lblFilenameSingle;
+	Button btnBrowseProject, btnBrowseSingle;
 	
 	public void createPartControl(Composite mainPanel) {
 		
@@ -38,7 +38,8 @@ public class SelectView extends ViewPart {
 		
 		Label lblFilenameUML = new Label (grpUML, SWT.NONE);
 		lblFilenameUML.setBounds(30, 25, 160, 20);
-		lblFilenameUML.setText("FilenameGoesHere.xml");
+		lblFilenameUML.setText("No file selected");
+		lblFilenameUML.setEnabled(false);
 		lblFilenameUML.pack();
 		
 		Button btnBrowseUML = new Button(grpUML, SWT.PUSH);
@@ -55,6 +56,7 @@ public class SelectView extends ViewPart {
 				String path = dlg.open();
 				if (path == null) return;
 				lblFilenameUML.setText(dlg.getFileName());
+				lblFilenameUML.setEnabled(true);
 				umlFile = new File(path);
 			}
 		});
@@ -64,17 +66,25 @@ public class SelectView extends ViewPart {
 		Group grpCode = new Group (mainPanel, SWT.NONE);
 		grpCode.setText ("Source Code");
 
-	    Button btnProjectRadio = new Button(grpCode, SWT.RADIO);
+	    btnProjectRadio = new Button(grpCode, SWT.RADIO);
 	    btnProjectRadio.setLocation(10, 20);
 	    btnProjectRadio.setText("Project");
+	    btnProjectRadio.setSelection(true);
 	    btnProjectRadio.pack();
+	    btnProjectRadio.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		radioSelectionChanged(btnProjectRadio);
+	    	}
+	    });
 	    
-		Label lblFilenameProject = new Label (grpCode, SWT.NONE);
+		lblFilenameProject = new Label (grpCode, SWT.NONE);
 		lblFilenameProject.setBounds(30, 45, 170, 20);
-		lblFilenameProject.setText("ProjectNameGoesHere");
+		lblFilenameProject.setText("No Project Selected");
+		lblFilenameProject.setEnabled(false);
 		lblFilenameProject.pack();
 		
-		Button btnBrowseProject = new Button(grpCode, SWT.PUSH);
+		btnBrowseProject = new Button(grpCode, SWT.PUSH);
 		btnBrowseProject.setText("Browse");
 		btnBrowseProject.setLocation(200, 40);
 		btnBrowseProject.pack();
@@ -82,26 +92,35 @@ public class SelectView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				DirectoryDialog dlg = new DirectoryDialog(btnBrowseProject.getShell());
-				dlg.setText("Select Java Project");
+				dlg.setText("Select Project Directory");
 				String path = dlg.open();
 				if (path == null) return;
 				lblFilenameProject.setText(path);
+				lblFilenameProject.setEnabled(true);
 				projectDirectory = new File(path);
 			}
 		});
 	    
-	    Button btnSingleRadio = new Button(grpCode, SWT.RADIO);
+	    btnSingleRadio = new Button(grpCode, SWT.RADIO);
 	    btnSingleRadio.setLocation(10, 70);
 	    btnSingleRadio.setText("Single File");
 	    btnSingleRadio.pack();
+	    btnSingleRadio.addSelectionListener(new SelectionAdapter() {
+	    	@Override
+	    	public void widgetSelected(SelectionEvent e) {
+	    		radioSelectionChanged(btnSingleRadio);
+	    	}
+	    });
 	    
-		Label lblFilenameSingle = new Label (grpCode, SWT.NONE);
+		lblFilenameSingle = new Label (grpCode, SWT.NONE);
 		lblFilenameSingle.setBounds(30, 95, 170, 20);
-		lblFilenameSingle.setText("FilenameGoesHere.java");
+		lblFilenameSingle.setText("No file selected");
+		lblFilenameSingle.setEnabled(false);
 		lblFilenameSingle.pack();
 		
-		Button btnBrowseSingle = new Button(grpCode, SWT.PUSH);
+		btnBrowseSingle = new Button(grpCode, SWT.PUSH);
 		btnBrowseSingle.setText("Browse");
+		btnBrowseSingle.setEnabled(false);
 		btnBrowseSingle.setLocation(200, 90);
 		btnBrowseSingle.pack();
 		btnBrowseSingle.addSelectionListener(new SelectionAdapter() {
@@ -114,6 +133,7 @@ public class SelectView extends ViewPart {
 				String path = dlg.open();
 				if (path == null) return;
 				lblFilenameSingle.setText(dlg.getFileName());
+				lblFilenameSingle.setEnabled(true);
 				javaFile = new File(path);
 			}
 		});
@@ -121,12 +141,66 @@ public class SelectView extends ViewPart {
 	    grpCode.pack();
 	    
 		Button btnCompute = new Button(mainPanel, SWT.PUSH);
-		btnCompute.setText("Compute");
+		btnCompute.setText("Compute Traceability");
 		btnCompute.pack();
+		btnCompute.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Boolean doProject = null;
+				if (umlFile == null) {
+					//TODO: Show error message - no UML file selected
+					return;
+				}
+				if (btnProjectRadio.getSelection()) {
+					if (projectDirectory == null) {
+						//TODO: Show error message - project directory not selected
+						return;
+					} else {
+						doProject = true;
+					}
+				} else if (btnSingleRadio.getSelection()) {
+					if (javaFile == null) {
+						//TODO: Show error message - java file not selected
+						return;
+					} else {
+						doProject = false;
+					}
+				} else {
+					//nothing selected
+					return;
+				}
+				computeTraceability(doProject);
+			}
+		});
 	}
 	
 	public void setFocus() {
 		mainPanel.setFocus();
+	}
+	
+	private void computeTraceability(boolean doProject) {
+		UMLParser.loadFile(umlFile);
+		if (doProject) {
+			JavaParser.collectFiles(projectDirectory);
+		} else {
+			JavaParser.loadFile(javaFile);
+		}
+		//TODO: Compare Results
+		//TODO: Display Results
+	}
+	
+	private void radioSelectionChanged(Button source) {
+		if (source == btnProjectRadio) {
+			if (projectDirectory != null) lblFilenameProject.setEnabled(true); //don't enable unless directory selected
+			btnBrowseProject.setEnabled(true);
+			lblFilenameSingle.setEnabled(false);
+			btnBrowseSingle.setEnabled(false);
+		} else {
+			if (javaFile != null) lblFilenameSingle.setEnabled(true); //dont enable unless file selected
+			btnBrowseSingle.setEnabled(true);
+			lblFilenameProject.setEnabled(false);
+			btnBrowseProject.setEnabled(false);
+		}
 	}
 
 }
