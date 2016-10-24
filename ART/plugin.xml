@@ -26,7 +26,14 @@
             class="edu.erau.se500.art.SelectView"
             icon="icons/sample.png"
             id="edu.erau.se500.art.MainView"
-            name="ART - Requirement Traceability">
+            name="ART - Select Files">
+      </view>
+            <view
+            category="edu.erau.se500.art"
+            class="edu.erau.se500.art.ResultsView"
+            icon="icons/sample.png"
+            id="edu.erau.se500.art.ResultsView"
+            name="ART - Results">
       </view>
    </extension>
 

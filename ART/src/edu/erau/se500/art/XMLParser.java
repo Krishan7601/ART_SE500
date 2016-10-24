@@ -2,9 +2,9 @@ package edu.erau.se500.art;
 
 import java.io.File;
 
-public class UMLParser {
+public class XMLParser {
 
-	static void loadFile(File xmlFile) {
+	static void parseFile(File xmlFile) {
 		
 		
 	}

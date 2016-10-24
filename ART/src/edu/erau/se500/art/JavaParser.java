@@ -1,10 +1,11 @@
 package edu.erau.se500.art;
 
 import java.io.File;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
+
 import javax.tools.JavaFileObject;
+
 import com.sun.source.tree.AnnotationTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
@@ -14,24 +15,23 @@ import com.sun.source.tree.TreeVisitor;
 import com.sun.source.tree.VariableTree;
 import com.sun.source.util.JavacTask;
 import com.sun.source.util.TreeScanner;
-import com.sun.tools.internal.xjc.api.JavaCompiler;
 import com.sun.tools.javac.api.JavacTool;
 import com.sun.tools.javac.file.JavacFileManager;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;	
 
 public class JavaParser<D, R> {
-/*IO part I need you help kevinric
+
 	static void collectFiles(File projectDirectory){
 		//for each file found in directory
 			//loadFile(thisFile);
 	}
 	
-	static void loadFile(File javaFile) {
+	static void parseFile(File javaFile) {
 		
 		
 	}
-*/
+
 	// you can choose .java whatever you like to test
 	 private static final String path = "/Users/Sola/git/art/ART/src/edu/erau/se500/art/SelectView.java";
 			 //"/Users/Sola/Documents/workspace/语法编辑器/src/语法编辑器/User.java";

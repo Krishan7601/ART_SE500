@@ -179,11 +179,11 @@ public class SelectView extends ViewPart {
 	}
 	
 	private void computeTraceability(boolean doProject) {
-		UMLParser.loadFile(umlFile);
+		XMLParser.parseFile(umlFile);
 		if (doProject) {
 			JavaParser.collectFiles(projectDirectory);
 		} else {
-			JavaParser.loadFile(javaFile);
+			JavaParser.parseFile(javaFile);
 		}
 		//TODO: Compare Results
 		//TODO: Display Results

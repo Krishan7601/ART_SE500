@@ -1,7 +1,7 @@
 package edu.erau.se500.art;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExtractedMethod extends ExtractedAttribute {
 	//TODO: Should we change the return type to something more powerful than a string?
