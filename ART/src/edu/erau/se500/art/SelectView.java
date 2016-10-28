@@ -204,9 +204,13 @@ public class SelectView extends ViewPart {
 	private void computeTraceability(boolean doProject) {
 		XMLParser.parseFile(umlFile);
 		if (doProject) {
-			JavaParser.collectFiles(projectDirectory);
+			JavaExtractor.collectFiles(projectDirectory);
 		} else {
-			JavaParser.parseFile(javaFile);
+			try {
+				JavaExtractor.extractFromFile(javaFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		//TODO: Compare Results
 		//TODO: Display Results

@@ -20,7 +20,7 @@ import com.sun.tools.javac.file.JavacFileManager;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;	
 */
-public class JavaParser<D, R> {
+public class JavaParser_OLD<D, R> {
 
 	static void collectFiles(File projectDirectory){
 		//for each file found in directory
