@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 import javax.tools.JavaFileObject;
-
+/*
 import com.sun.source.tree.AnnotationTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
@@ -19,7 +19,7 @@ import com.sun.tools.javac.api.JavacTool;
 import com.sun.tools.javac.file.JavacFileManager;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;	
-
+*/
 public class JavaParser<D, R> {
 
 	static void collectFiles(File projectDirectory){
@@ -31,7 +31,8 @@ public class JavaParser<D, R> {
 		
 		
 	}
-
+}
+/*
 	// you can choose .java whatever you like to test
 	 private static final String path = "/Users/Sola/git/art/ART/src/edu/erau/se500/art/SelectView.java";
 			 //"/Users/Sola/Documents/workspace/语法编辑器/src/语法编辑器/User.java";
@@ -108,3 +109,4 @@ public class JavaParser<D, R> {
 	        new JavaParser().JavaParserFiles();
 	    }
 }
+*/

@@ -1,7 +1,11 @@
 package edu.erau.se500.art;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -171,6 +175,25 @@ public class SelectView extends ViewPart {
 				}
 				computeTraceability(doProject);
 			}
+		});
+		
+		Button btnAcceleo = new Button(mainPanel, SWT.PUSH);
+		btnAcceleo.setText("Acceleo");
+		btnAcceleo.pack();
+		btnAcceleo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				File gensrc = new File("C:\\Users\\Special VFR\\Desktop\\gen-src");
+				URI model = URI.createFileURI("C:\\Users\\Special VFR\\workspace\\TravelAgency\\agency.uml");
+				List<String> arguments = new ArrayList<String>();
+				try {
+					Generate g = new Generate(model, gensrc, arguments);
+					g.doGenerate(null);
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+				
 		});
 	}
 	
