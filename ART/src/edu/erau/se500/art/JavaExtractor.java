@@ -3,11 +3,9 @@ package edu.erau.se500.art;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
@@ -18,14 +16,28 @@ public class JavaExtractor {
 
 	static ExtractedClass extrClass;
 
-	static void collectFiles(File projectDirectory){
-		//for each file found in directory
-		//loadFile(thisFile);
+	static void collectFiles(File directory, boolean fromUML) throws IOException {
+		File[] listOfFiles = directory.listFiles();
+
+	    for (int i = 0; i < listOfFiles.length; i++) {
+	      if (listOfFiles[i].isFile()) {
+	        extractFromFile(listOfFiles[i], fromUML);
+	      } else if (listOfFiles[i].isDirectory()) {
+	        collectFiles(listOfFiles[i], fromUML);
+	      }
+	    }
 	}
 
-	static void extractFromFile(File javaFile) throws IOException {
+	static void extractFromFile(File javaFile, boolean fromUML) throws IOException {
+		String extension = "";
+		System.out.println(javaFile.getAbsolutePath());
+		
+		int i = javaFile.getName().lastIndexOf('.');
+		if (i > 0) {
+		    extension = javaFile.getName().substring(i+1);
+		}
+		if (!extension.equalsIgnoreCase("java")) return; //skip files that are not java
 
-		// creates an input stream for the file to be parsed
 		FileInputStream in = new FileInputStream(javaFile);
 
 		CompilationUnit cu;
@@ -35,21 +47,10 @@ public class JavaExtractor {
 			in.close();
 		}
 
-		NodeList<TypeDeclaration<?>> td = cu.getTypes();
+		TypeDeclaration<?> td = cu.getTypes().get(0);
+		extrClass =new ExtractedClass(td.getName(), "returntype");
 
-		for (TypeDeclaration<?> t : td) {
-			System.out.println(t.getName());
-			extrClass =new ExtractedClass(t.getName(), "returntype");
-		}
-
-		ExtractedClass cl =new ExtractedClass("classname","returntype");
-		cl.attributes=new ArrayList<ExtractedAttribute>();
-		cl.methods=new ArrayList<ExtractedMethod>();
-		//cl.attributes.add(cl);
-
-
-		// visit and print the methods names
-		//      new ClassVisitor().visit(cu, null);
+		//new ClassVisitor().visit(cu, null);
 		new MethodVisitor().visit(cu, null);
 		new VariableVisitor().visit(cu, null);
 

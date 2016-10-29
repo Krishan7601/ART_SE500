@@ -55,7 +55,7 @@ public class SelectView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog dlg = new FileDialog(btnBrowseUML.getShell(),  SWT.OPEN  );
 				dlg.setText("Select Class Diagram");
-				final String[] allowedExtensions = {"*.xml"};
+				final String[] allowedExtensions = {"*.uml"};
 				dlg.setFilterExtensions(allowedExtensions);
 				String path = dlg.open();
 				if (path == null) return;
@@ -176,44 +176,40 @@ public class SelectView extends ViewPart {
 				computeTraceability(doProject);
 			}
 		});
-		
-		Button btnAcceleo = new Button(mainPanel, SWT.PUSH);
-		btnAcceleo.setText("Acceleo");
-		btnAcceleo.pack();
-		btnAcceleo.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				File gensrc = new File("C:\\Users\\Special VFR\\Desktop\\gen-src");
-				URI model = URI.createFileURI("C:\\Users\\Special VFR\\workspace\\TravelAgency\\agency.uml");
-				List<String> arguments = new ArrayList<String>();
-				try {
-					Generate g = new Generate(model, gensrc, arguments);
-					g.doGenerate(null);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				}
-			}
-				
-		});
-	}
-	
-	public void setFocus() {
-		mainPanel.setFocus();
 	}
 	
 	private void computeTraceability(boolean doProject) {
-		XMLParser.parseFile(umlFile);
-		if (doProject) {
-			JavaExtractor.collectFiles(projectDirectory);
-		} else {
-			try {
-				JavaExtractor.extractFromFile(javaFile);
-			} catch (IOException e) {
-				e.printStackTrace();
+		parseUML();
+		
+		try {
+			if (doProject) {
+				JavaExtractor.collectFiles(projectDirectory, false);
+			} else {
+				JavaExtractor.extractFromFile(javaFile, false);
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		//TODO: Compare Results
 		//TODO: Display Results
+	}
+	
+	private void parseUML() {
+		File genSrcDir = new File("src-gen");
+		if (!genSrcDir.exists()) genSrcDir.mkdir();
+		else {
+			emptyDirectory(genSrcDir);
+		}
+		
+		URI model = URI.createFileURI(umlFile.getAbsolutePath());
+		List<String> arguments = new ArrayList<String>();
+		try {
+			Generate g = new Generate(model, genSrcDir, arguments);
+			g.doGenerate(null);
+			JavaExtractor.collectFiles(genSrcDir, true);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	private void radioSelectionChanged(Button source) {
@@ -228,6 +224,23 @@ public class SelectView extends ViewPart {
 			lblFilenameProject.setEnabled(false);
 			btnBrowseProject.setEnabled(false);
 		}
+	}
+	
+	private void emptyDirectory(File thisDir) {
+		File[] listOfFiles = thisDir.listFiles();
+
+	    for (int i = 0; i < listOfFiles.length; i++) {
+	      if (listOfFiles[i].isFile()) {
+	        listOfFiles[i].delete();
+	      } else if (listOfFiles[i].isDirectory()) {
+	       emptyDirectory(listOfFiles[i]);
+	       listOfFiles[i].delete();
+	      }
+	    }
+	}
+	
+	public void setFocus() {
+		mainPanel.setFocus();
 	}
 
 }
