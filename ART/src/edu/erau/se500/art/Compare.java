@@ -12,54 +12,33 @@ public class Compare {
 
 	static List<ExtractedClass> UMLClasses = new ArrayList<ExtractedClass>();
 	static List<ExtractedClass> javaClasses = new ArrayList<ExtractedClass>();
-	
-	static List<ExtractedAttribute> UMLAttributes = new ArrayList<ExtractedAttribute>();
-	static List<ExtractedAttribute> javaAttributes = new ArrayList<ExtractedAttribute>();
-	
-	static List<ExtractedMethod> UMLMethods = new ArrayList<ExtractedMethod>();
-	static List<ExtractedMethod> javaMethods = new ArrayList<ExtractedMethod>();
 
-	// Initial Check for Exact Matches - redundant? 
-	static Set<ExtractedClass> UMLClassSet = new HashSet<ExtractedClass>(UMLClasses);
-	static List<ExtractedClass> exactMatchList = new ArrayList<ExtractedClass>();
+	// Total Counters
+	static int classTotalCount = 0;
+	static int attributeTotalCount = 0;
+	static int methodTotalCount = 0;
+	// Match Counter
+	static int classNameMatchCount = 0;
+	static int attributeNameMatchCount = 0;
+	static int attributeTypeMatchCount = 0;
+	static int attributeAccessModifierMatchCount = 0;
+	static int attributeIsStaticMatchCount = 0;
+	static int attributeIsFinalMatchCount = 0;
+	static int attributeIsAbstractMatchCount = 0;
+	static int methodNameMatchCount = 0;
+	static int methodParameterTotalCount = 0;
+	static int methodParameterMatchCount = 0;
 
-	// ExtractedClass name
-	static List<String> UMLClassNames = null;
-	static List<String> javaClassNames = null;
-	static Set<String> UMLClassNamesSet = new HashSet<String>(UMLClassNames);
-	static List<String> classNameMatchList = new ArrayList<String>();
-	
-	// ExtractedClass parent
-	static List<ExtractedClass> UMLClassParent = null;
-	static List<ExtractedClass> javaClassParent = null;
-	static Set<ExtractedClass> UMLClassParentSet = new HashSet<ExtractedClass>(UMLClassParent);
-	static List<ExtractedClass> classParentMatchList = new ArrayList<ExtractedClass>();
-
-	// ExtractedClass interface
-	static List<ExtractedClass> UMLClassInterface = null;
-	static List<ExtractedClass> javaClassInterface = null;
-	static Set<ExtractedClass> UMLClassInterfaceSet = new HashSet<ExtractedClass>(UMLClassInterface);
-	static List<ExtractedClass> classInterfaceMatchList = new ArrayList<ExtractedClass>();
-	
-	// ExtractedClass attributes.name
-	static List<String> UMLAttributeNames = null;
-	static List<String> javaAttributeNames = null;
-	static Set<String> UMLAttributeNamesSet = new HashSet<String>(UMLAttributeNames);
-	static List<String> attributeNameMatchList = new ArrayList<String>();
-	
-	// ExtractedClass attributes.type
-	// ExtractedClass attributes.accessModifier
-	// ExtractedClass attributes.isStatic
-	// ExtractedClass attributes.isFinal
-	// ExtractedClass attributes.isAbstract
-
-	// ExtractedClass methods.name
-	static List<String> UMLMethodNames = null;
-	static List<String> javaMethodNames = null;
-	static Set<String> UMLMethodNamesSet = new HashSet<String>(UMLMethodNames);
-	static List<String> methodNameMatchList = new ArrayList<String>();
-	// ExtractedClass methods.parameters
-	
+	// Temporary Results
+	static int classNameResults = 0;
+	static int attributeNameResults = 0;
+	static int attributeTypeResults = 0;
+	static int attributeAccessModifierResults = 0;
+	static int attributeIsStaticResults = 0;
+	static int attributeIsFinalResults = 0;
+	static int attributeIsAbstractResults = 0;
+	static int methodNameResults = 0;
+	static int methodParameterResults = 0;
 
 	public static void tempPrint() {
 		System.out.println("-------------------------------------------");
@@ -69,65 +48,99 @@ public class Compare {
 		System.out.println("-------------------------------------------");
 	}
 
-	public static void populateLists() {
-		// UML Lists
-		for (ExtractedClass compUMLClass : UMLClasses) {
-			UMLClassNames.add(compUMLClass.name);
-			UMLClassParent.add(compUMLClass.parentClass);
-			UMLClassInterface.add(compUMLClass.interfaceClass);
+	public static void compare() {
+		for (ExtractedClass umlClass : UMLClasses) {
+			classTotalCount++;
+			for (ExtractedClass javaClass : javaClasses) {
+				if (umlClass.name.equals(javaClass.name)) {
+					classNameMatchCount++;
+				}
+				// parent 
+				// interface
+				for (ExtractedAttribute umlAttribute : umlClass.attributes) {
+					attributeTotalCount++;
+					for (ExtractedAttribute javaAttribute : javaClass.attributes) {
+						if (umlAttribute.name.equals(javaAttribute.name)) {
+							attributeNameMatchCount++;
+						}
+						if (umlAttribute.type.equals(javaAttribute.type)) {
+							attributeTypeMatchCount++;
+						}
+						if (umlAttribute.accessModifier.equals(javaAttribute.accessModifier)) {
+							attributeAccessModifierMatchCount++;
+						}
+						if (umlAttribute.isStatic && javaAttribute.isStatic) {
+							attributeIsStaticMatchCount++;
+						}
+						if (umlAttribute.isFinal && javaAttribute.isFinal) {
+							attributeIsFinalMatchCount++;
+						}
+						if (umlAttribute.isAbstract && javaAttribute.isAbstract) {
+							attributeIsAbstractMatchCount++;
+						}
+					}
+				}
+				for (ExtractedMethod umlMethod : umlClass.methods) {
+					methodTotalCount++;
+					for (ExtractedMethod javaMethod : javaClass.methods) {
+						if (umlMethod.name.equals(javaMethod.name)) {
+							methodNameMatchCount++;
+						}
+						for (String umlParameter : umlMethod.parameters) {
+							for (String javaParameter : javaMethod.parameters) {
+								methodParameterTotalCount++;
+								if (umlParameter.equals(javaParameter)) {
+									methodParameterMatchCount++;
+								}
 
-			for (ExtractedAttribute compUMLAttribute : compUMLClass.attributes) {
-				UMLAttributeNames.add(compUMLAttribute.name);
+							}
+						}
+					}
+				}
+				tempClassResults();
+				tempResultsDisplay(umlClass.name);
 			}
-			for (ExtractedMethod compUMLMethod : compUMLClass.methods) {
-				javaMethodNames.add(compUMLMethod.name);
-			}
-
 		}
-		
-		// Java Lists
-		for(ExtractedClass compJavaClass : javaClasses) {
-			javaClassNames.add(compJavaClass.name);
-			javaClassParent.add(compJavaClass.parentClass);
-			javaClassInterface.add(compJavaClass.interfaceClass);
-			
-			for (ExtractedAttribute compJavaAttribute : compJavaClass.attributes) {
-				javaAttributeNames.add(compJavaAttribute.name);
-			}	
-			for (ExtractedMethod compJavaMethod : compJavaClass.methods) {
-				javaMethodNames.add(compJavaMethod.name);
-			}
-		}
-	}
-	
-	public static void exactClassMatches() {
-		exactMatchList.addAll(UMLClasses);
-		exactMatchList.addAll(javaClasses);
-		exactMatchList.retainAll(UMLClassNamesSet);
 	}
 
-	public static void compareClassNames() {
-		classNameMatchList.addAll(UMLClassNames);
-		classNameMatchList.addAll(javaClassNames);
-		classNameMatchList.retainAll(UMLClassNamesSet);
+	private static void tempClassResults() {
+		classNameResults = classNameMatchCount/classTotalCount;
+		attributeNameResults = attributeNameMatchCount/attributeTotalCount;
+		attributeTypeResults = attributeTypeMatchCount/attributeTotalCount;
+		attributeAccessModifierResults = attributeAccessModifierMatchCount/attributeTotalCount;
+		attributeIsStaticResults = attributeIsStaticMatchCount/attributeTotalCount;
+		attributeIsFinalResults = attributeIsFinalMatchCount/attributeTotalCount;
+		attributeIsAbstractResults = attributeIsAbstractMatchCount/attributeTotalCount;
+		methodNameResults = methodNameMatchCount/methodTotalCount;
+		methodParameterResults = methodParameterMatchCount/methodParameterTotalCount;
 	}
 	
-	public static void compareParentClasses() {
-		classParentMatchList.addAll(UMLClassParent);
-		classParentMatchList.addAll(javaClassParent);
-		classParentMatchList.retainAll(UMLClassNamesSet);
-	}	
-	
-	public static void compareInterfaceClasses() {
-		classInterfaceMatchList.addAll(UMLClassInterface);
-		classInterfaceMatchList.addAll(javaClassInterface);
-		classInterfaceMatchList.retainAll(UMLClassInterfaceSet);
+	private static void tempResultsDisplay(String className) {
+		System.out.println("\nClass Name: "+className);
+		System.out.println("\nClass Name Match: ");
+		fractionDisplay(classNameMatchCount,classTotalCount,classNameResults);
+		System.out.println("\nAttribute Name Match: ");
+		fractionDisplay(attributeNameMatchCount,attributeTotalCount,attributeNameResults);
+		System.out.println("\nAttribute Access Modifier Match: ");
+		fractionDisplay(attributeAccessModifierMatchCount,attributeTotalCount,attributeAccessModifierResults);
+		System.out.println("\nAttribute isStatic Match: ");
+		fractionDisplay(attributeIsStaticMatchCount,attributeTotalCount,attributeIsStaticResults);
+		System.out.println("\nAttribute isFinal Match: ");
+		fractionDisplay(attributeIsFinalMatchCount,attributeTotalCount,attributeIsFinalResults);
+		System.out.println("\nAttribute isFinal Match: ");
+		fractionDisplay(attributeIsFinalMatchCount,attributeTotalCount,attributeIsFinalResults);
+		System.out.println("\nAttribute isAbstrtact Match: ");
+		fractionDisplay(attributeIsAbstractMatchCount,attributeTotalCount,attributeIsAbstractResults);
+		System.out.println("\nMethod Name Match: ");
+		fractionDisplay(methodNameMatchCount,methodTotalCount,methodNameResults);
+		System.out.println("\nMethod Parameter Match: ");
+		fractionDisplay(methodParameterMatchCount,methodParameterTotalCount,methodParameterResults);
 	}
 	
-	public static void compareAttributeName() {
-		attributeNameMatchList.addAll(UMLAttributeNames);
-		attributeNameMatchList.addAll(javaAttributeNames);
-		attributeNameMatchList.retainAll(UMLAttributeNamesSet);
+	private static void fractionDisplay(int matchCount, int totalCount, int resultDecimal) {
+		System.out.println("\t"+matchCount+"/"+totalCount);
+		System.out.println("\t :"+resultDecimal*100+"%");
 	}
 }
+
 
