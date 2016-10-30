@@ -21,20 +21,23 @@ public class ResultsView extends ViewPart {
 		 TableColumn tc1 = new TableColumn(table, SWT.CENTER);
 		    TableColumn tc2 = new TableColumn(table, SWT.CENTER);
 		    TableColumn tc3 = new TableColumn(table, SWT.CENTER);
+		    TableColumn tc4 = new TableColumn(table, SWT.CENTER);
 		    tc1.setText("Class Name");
-		    tc2.setText("Attributes");
-		    tc3.setText("Methods");
+		    tc2.setText("Match Found");
+		    tc3.setText("Attribute Matches");
+		    tc4.setText("Method Matches");
 		    tc1.setWidth(100);
 		    tc2.setWidth(100);
 		    tc3.setWidth(100);
+		    tc4.setWidth(100);
 		    table.setHeaderVisible(true);
 		    
 		    TableItem item1 = new TableItem(table, SWT.NONE);
-		    item1.setText(new String[] { "Tim", "Hatton", "Kentucky" });
+		    item1.setText(new String[] { "Tim", "Yes", "Hatton", "Kentucky" });
 		    TableItem item2 = new TableItem(table, SWT.NONE);
-		    item2.setText(new String[] { "Caitlyn", "Warner", "Ohio" });
+		    item2.setText(new String[] { "Caitlyn", "Yes", "Warner", "Ohio" });
 		    TableItem item3 = new TableItem(table, SWT.NONE);
-		    item3.setText(new String[] { "Reese", "Miller", "Ohio" });
+		    item3.setText(new String[] { "Reese", "Yes", "Miller", "Ohio" });
 		
 	}
 	

@@ -16,6 +16,10 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IPageLayout;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 public class SelectView extends ViewPart {
@@ -178,7 +182,7 @@ public class SelectView extends ViewPart {
 		});
 		
 //		Button btnParse = new Button(mainPanel, SWT.PUSH);
-//		btnParse.setText("Compute Traceability");
+//		btnParse.setText("View");
 //		btnParse.pack();
 //		btnParse.addSelectionListener(new SelectionAdapter() {
 //			@Override
@@ -196,10 +200,7 @@ public class SelectView extends ViewPart {
 		parseUML();
 		parseJava(doProject);
 		//TODO: Compare Results
-		//TODO: Display Results
-		
-		Compare.tempPrint();
-		System.out.println("COMPLETE!");
+		showResultsView();
 	}
 	
 	private void parseUML() {
@@ -229,6 +230,21 @@ public class SelectView extends ViewPart {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void showResultsView() {
+		IWorkbenchPage page = getSite().getPage();
+		IViewPart resultsView = page.findView("edu.erau.se500.art.ResultsView");
+		if (resultsView == null) {
+			try {
+				resultsView = page.showView("edu.erau.se500.art.ResultsView");
+			} catch (PartInitException e) {
+				e.printStackTrace();
+			}
+		}
+		if (resultsView != null) {
+			getSite().getPage().bringToTop(resultsView);
 		}
 	}
 	
