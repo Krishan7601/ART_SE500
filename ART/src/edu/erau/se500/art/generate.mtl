@@ -1,24 +1,19 @@
 [comment encoding = UTF-8 /]
-[**
- * The documentation of the module generate.
- */]
 [module generate('http://www.eclipse.org/uml2/5.0.0/UML')]
 
-
- [template public generate(aClass : Class)]
-
+[template public generate(aClass : Class)]
 
 [comment @main /]
- [file (aClass.name.toUpperFirst().replaceAll('[ .]', '').concat('.java'), false)]
-   public class [aClass.name.toUpperFirst().replaceAll('[ .]', '')/] {
+ [file (aClass.name.toUpperFirst().concat('.java'), false)]
+   public class [aClass.name.replaceAll('[ .]', '').toUpperFirst()/] {
 
      [for (p: Property | aClass.attribute) separator('\n')]
-       private [p.type.name.replaceAll('[ .]', '')/] [p.name.replaceAll(' ', '')/];
+       private [p.type.name.replaceAll(' ', '')/] [p.name.replaceAll(' ', '')/];
      [/for]
  
  
      [for (o: Operation | aClass.ownedOperation) separator('\n')]
-       public [o.type.name/] [o.name.replaceAll('[ .]', '')/]() {
+       public [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]() {
          // TODO should be implemented
        }
      [/for]

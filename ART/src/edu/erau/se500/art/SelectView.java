@@ -16,7 +16,6 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -199,7 +198,7 @@ public class SelectView extends ViewPart {
 	private void computeTraceability(boolean doProject) {
 		parseUML();
 		parseJava(doProject);
-		//TODO: Compare Results
+		Compare.compare();
 		showResultsView();
 	}
 	
@@ -245,6 +244,8 @@ public class SelectView extends ViewPart {
 		}
 		if (resultsView != null) {
 			getSite().getPage().bringToTop(resultsView);
+			ResultsView rv = (ResultsView) resultsView;
+			rv.showResults();
 		}
 	}
 	
