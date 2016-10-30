@@ -9,8 +9,8 @@ public class ExtractedClass extends ExtractedMethod {
 	List<ExtractedAttribute> attributes = new ArrayList<ExtractedAttribute>();
 	List<ExtractedMethod> methods = new ArrayList<ExtractedMethod>();
 	
-	ExtractedClass(String name, String returnType) {
-		super(name, returnType);
+	ExtractedClass(String name) {
+		super(name, null);
 		parentClass = null;
 		interfaceClass = null;
 		attributes = new ArrayList<ExtractedAttribute>();

@@ -176,22 +176,30 @@ public class SelectView extends ViewPart {
 				computeTraceability(doProject);
 			}
 		});
+		
+//		Button btnParse = new Button(mainPanel, SWT.PUSH);
+//		btnParse.setText("Compute Traceability");
+//		btnParse.pack();
+//		btnParse.addSelectionListener(new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				try {
+//					JavaExtractor.extractFromFile(javaFile, false);
+//				} catch (IOException ex) {
+//					ex.printStackTrace();
+//				}
+//			}
+//		});
 	}
 	
 	private void computeTraceability(boolean doProject) {
 		parseUML();
-		
-		try {
-			if (doProject) {
-				JavaExtractor.collectFiles(projectDirectory, false);
-			} else {
-				JavaExtractor.extractFromFile(javaFile, false);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		parseJava(doProject);
 		//TODO: Compare Results
 		//TODO: Display Results
+		
+		Compare.tempPrint();
+		System.out.println("COMPLETE!");
 	}
 	
 	private void parseUML() {
@@ -209,6 +217,18 @@ public class SelectView extends ViewPart {
 			JavaExtractor.collectFiles(genSrcDir, true);
 		} catch (IOException ex) {
 			ex.printStackTrace();
+		}
+	}
+	
+	private void parseJava(boolean doProject) {
+		try {
+			if (doProject) {
+				JavaExtractor.collectFiles(projectDirectory, false);
+			} else {
+				JavaExtractor.extractFromFile(javaFile, false);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
