@@ -26,8 +26,19 @@ public class Compare {
 	static int attributeIsFinalMatchCount = 0;
 	static int attributeIsAbstractMatchCount = 0;
 	static int methodNameMatchCount = 0;
+	static int methodParameterTotalCount = 0;
 	static int methodParameterMatchCount = 0;
 
+	// Temporary Results
+	static int classNameResults = 0;
+	static int attributeNameResults = 0;
+	static int attributeTypeResults = 0;
+	static int attributeAccessModifierResults = 0;
+	static int attributeIsStaticResults = 0;
+	static int attributeIsFinalResults = 0;
+	static int attributeIsAbstractResults = 0;
+	static int methodNameResults = 0;
+	static int methodParameterResults = 0;
 
 	public static void tempPrint() {
 		System.out.println("-------------------------------------------");
@@ -65,7 +76,7 @@ public class Compare {
 							attributeIsFinalMatchCount++;
 						}
 						if (umlAttribute.isAbstract && javaAttribute.isAbstract) {
-							attributeIsFinalMatchCount++;
+							attributeIsAbstractMatchCount++;
 						}
 					}
 				}
@@ -77,18 +88,59 @@ public class Compare {
 						}
 						for (String umlParameter : umlMethod.parameters) {
 							for (String javaParameter : javaMethod.parameters) {
+								methodParameterTotalCount++;
 								if (umlParameter.equals(javaParameter)) {
 									methodParameterMatchCount++;
 								}
-									
+
 							}
 						}
 					}
 				}
+				tempClassResults();
+				tempResultsDisplay(umlClass.name);
 			}
 		}
 	}
 
+	private static void tempClassResults() {
+		classNameResults = classNameMatchCount/classTotalCount;
+		attributeNameResults = attributeNameMatchCount/attributeTotalCount;
+		attributeTypeResults = attributeTypeMatchCount/attributeTotalCount;
+		attributeAccessModifierResults = attributeAccessModifierMatchCount/attributeTotalCount;
+		attributeIsStaticResults = attributeIsStaticMatchCount/attributeTotalCount;
+		attributeIsFinalResults = attributeIsFinalMatchCount/attributeTotalCount;
+		attributeIsAbstractResults = attributeIsAbstractMatchCount/attributeTotalCount;
+		methodNameResults = methodNameMatchCount/methodTotalCount;
+		methodParameterResults = methodParameterMatchCount/methodParameterTotalCount;
+	}
+	
+	private static void tempResultsDisplay(String className) {
+		System.out.println("\nClass Name: "+className);
+		System.out.println("\nClass Name Match: ");
+		fractionDisplay(classNameMatchCount,classTotalCount,classNameResults);
+		System.out.println("\nAttribute Name Match: ");
+		fractionDisplay(attributeNameMatchCount,attributeTotalCount,attributeNameResults);
+		System.out.println("\nAttribute Access Modifier Match: ");
+		fractionDisplay(attributeAccessModifierMatchCount,attributeTotalCount,attributeAccessModifierResults);
+		System.out.println("\nAttribute isStatic Match: ");
+		fractionDisplay(attributeIsStaticMatchCount,attributeTotalCount,attributeIsStaticResults);
+		System.out.println("\nAttribute isFinal Match: ");
+		fractionDisplay(attributeIsFinalMatchCount,attributeTotalCount,attributeIsFinalResults);
+		System.out.println("\nAttribute isFinal Match: ");
+		fractionDisplay(attributeIsFinalMatchCount,attributeTotalCount,attributeIsFinalResults);
+		System.out.println("\nAttribute isAbstrtact Match: ");
+		fractionDisplay(attributeIsAbstractMatchCount,attributeTotalCount,attributeIsAbstractResults);
+		System.out.println("\nMethod Name Match: ");
+		fractionDisplay(methodNameMatchCount,methodTotalCount,methodNameResults);
+		System.out.println("\nMethod Parameter Match: ");
+		fractionDisplay(methodParameterMatchCount,methodParameterTotalCount,methodParameterResults);
+	}
+	
+	private static void fractionDisplay(int matchCount, int totalCount, int resultDecimal) {
+		System.out.println("\t"+matchCount+"/"+totalCount);
+		System.out.println("\t :"+resultDecimal*100+"%");
+	}
 }
 
 
