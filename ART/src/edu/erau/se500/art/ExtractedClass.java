@@ -5,7 +5,9 @@ import java.util.List;
 
 public class ExtractedClass extends ExtractedMethod {
 	String parentClass;
-	List<String> interfaceClasses;
+
+	List<String> interfaceClasses = new ArrayList<String>();
+
 	List<ExtractedAttribute> attributes = new ArrayList<ExtractedAttribute>();
 	List<ExtractedMethod> methods = new ArrayList<ExtractedMethod>();
 	
