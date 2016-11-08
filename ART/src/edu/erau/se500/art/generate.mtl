@@ -11,7 +11,6 @@
        private [p.type.name.replaceAll(' ', '')/] [p.name.replaceAll(' ', '')/];
      [/for]
  
- 
      [for (o: Operation | aClass.ownedOperation) separator('\n')]
        public [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]() {
          // TODO should be implemented
