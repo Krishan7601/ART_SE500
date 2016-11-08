@@ -248,7 +248,6 @@ public class SelectView extends ViewPart {
 			rv.showResults();
 		}
 	}
-	
 	private void radioSelectionChanged(Button source) {
 		if (source == btnProjectRadio) {
 			if (projectDirectory != null) lblFilenameProject.setEnabled(true); //don't enable unless directory selected

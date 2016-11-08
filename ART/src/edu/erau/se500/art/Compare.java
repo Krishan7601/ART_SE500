@@ -31,7 +31,7 @@ public class Compare {
 						}
 					}
 					
-					for (ExtractedAttribute umlMethod : umlClass.methods) {
+					for (ExtractedMethod umlMethod : umlClass.methods) {
 						thisResult.methodsTotal++;
 						for (ExtractedMethod javaMethod : javaClass.methods) {
 							if (umlMethod.name.toLowerCase().equals(javaMethod.name.toLowerCase()) && 
