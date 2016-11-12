@@ -9,6 +9,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -30,6 +32,7 @@ public class SelectView extends ViewPart {
 	Button btnProjectRadio, btnSingleRadio;
 	Label lblFilenameProject, lblFilenameSingle;
 	Button btnBrowseProject, btnBrowseSingle;
+	Button btnForwardRadio, btnBackwardRadio;
 	
 	public void createPartControl(Composite mainPanel) {
 		
@@ -81,7 +84,7 @@ public class SelectView extends ViewPart {
 	    btnProjectRadio.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
-	    		radioSelectionChanged(btnProjectRadio);
+	    		radioSourceSelectionChanged(btnProjectRadio);
 	    	}
 	    });
 	    
@@ -115,7 +118,7 @@ public class SelectView extends ViewPart {
 	    btnSingleRadio.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
-	    		radioSelectionChanged(btnSingleRadio);
+	    		radioSourceSelectionChanged(btnSingleRadio);
 	    	}
 	    });
 	    
@@ -147,6 +150,22 @@ public class SelectView extends ViewPart {
 	    
 	    grpCode.pack();
 	    
+		Group grpDirection = new Group (mainPanel, SWT.NONE);
+		grpDirection.setText ("Direction");
+		grpDirection.setSize(200, 50);
+		
+	    btnForwardRadio = new Button(grpDirection, SWT.RADIO);
+	    btnForwardRadio.setLocation(10, 20);
+	    btnForwardRadio.setText("Forward");
+	    btnForwardRadio.pack();
+	    
+	    btnBackwardRadio = new Button(grpDirection, SWT.RADIO);
+	    btnBackwardRadio.setLocation(10, 40);
+	    btnBackwardRadio.setText("Backward");
+	    btnBackwardRadio.pack();
+		
+		grpDirection.pack();
+	    
 		Button btnCompute = new Button(mainPanel, SWT.PUSH);
 		btnCompute.setText("Compute Traceability");
 		btnCompute.pack();
@@ -155,19 +174,28 @@ public class SelectView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				Boolean doProject = null;
 				if (umlFile == null) {
-					//TODO: Show error message - no UML file selected
+					MessageBox mb = new MessageBox(mainPanel.getShell(), SWT.ICON_ERROR | SWT.OK);
+					mb.setText("Error");
+					mb.setMessage("No UML Class Diagram was selected.");
+					mb.open();
 					return;
 				}
 				if (btnProjectRadio.getSelection()) {
 					if (projectDirectory == null) {
-						//TODO: Show error message - project directory not selected
+						MessageBox mb = new MessageBox(mainPanel.getShell(), SWT.ICON_ERROR | SWT.OK);
+						mb.setText("Error");
+						mb.setMessage("No project directory was selected.");
+						mb.open();
 						return;
 					} else {
 						doProject = true;
 					}
 				} else if (btnSingleRadio.getSelection()) {
 					if (javaFile == null) {
-						//TODO: Show error message - java file not selected
+						MessageBox mb = new MessageBox(mainPanel.getShell(), SWT.ICON_ERROR | SWT.OK);
+						mb.setText("Error");
+						mb.setMessage("No java file was selected.");
+						mb.open();
 						return;
 					} else {
 						doProject = false;
@@ -179,20 +207,6 @@ public class SelectView extends ViewPart {
 				computeTraceability(doProject);
 			}
 		});
-		
-//		Button btnParse = new Button(mainPanel, SWT.PUSH);
-//		btnParse.setText("View");
-//		btnParse.pack();
-//		btnParse.addSelectionListener(new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				try {
-//					JavaExtractor.extractFromFile(javaFile, false);
-//				} catch (IOException ex) {
-//					ex.printStackTrace();
-//				}
-//			}
-//		});
 	}
 	
 	private void computeTraceability(boolean doProject) {
@@ -248,7 +262,7 @@ public class SelectView extends ViewPart {
 			rv.showResults();
 		}
 	}
-	private void radioSelectionChanged(Button source) {
+	private void radioSourceSelectionChanged(Button source) {
 		if (source == btnProjectRadio) {
 			if (projectDirectory != null) lblFilenameProject.setEnabled(true); //don't enable unless directory selected
 			btnBrowseProject.setEnabled(true);
