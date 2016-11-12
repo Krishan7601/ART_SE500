@@ -8,10 +8,14 @@ public class Compare {
 	static List<ExtractedClass> UMLClasses = new ArrayList<ExtractedClass>();
 	static List<ExtractedClass> javaClasses = new ArrayList<ExtractedClass>();
 
-
 	static List<CompareResults> results = new ArrayList<CompareResults>();
 
-	public static void compare() {
+	public static void compare(boolean doForward) {
+		if (doForward) compareForwards();
+		else compareBackwards();
+	}
+	
+	private static void compareForwards() {
 		for (ExtractedClass umlClass : UMLClasses) {
 
 			CompareResults thisResult = new CompareResults(umlClass.name);
@@ -79,6 +83,10 @@ public class Compare {
 				}
 			}
 		}
+	}
+	
+	private static void compareBackwards() {
+		
 	}
 }
 

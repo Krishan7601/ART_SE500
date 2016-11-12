@@ -155,6 +155,7 @@ public class SelectView extends ViewPart {
 		grpDirection.setSize(200, 50);
 		
 	    btnForwardRadio = new Button(grpDirection, SWT.RADIO);
+	    btnForwardRadio.setSelection(true);
 	    btnForwardRadio.setLocation(10, 20);
 	    btnForwardRadio.setText("Forward");
 	    btnForwardRadio.pack();
@@ -173,6 +174,9 @@ public class SelectView extends ViewPart {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Boolean doProject = null;
+				Boolean doForward = null;
+				
+				//check uml source
 				if (umlFile == null) {
 					MessageBox mb = new MessageBox(mainPanel.getShell(), SWT.ICON_ERROR | SWT.OK);
 					mb.setText("Error");
@@ -180,6 +184,7 @@ public class SelectView extends ViewPart {
 					mb.open();
 					return;
 				}
+				//check java source
 				if (btnProjectRadio.getSelection()) {
 					if (projectDirectory == null) {
 						MessageBox mb = new MessageBox(mainPanel.getShell(), SWT.ICON_ERROR | SWT.OK);
@@ -204,15 +209,30 @@ public class SelectView extends ViewPart {
 					//nothing selected
 					return;
 				}
-				computeTraceability(doProject);
+				//set direction
+				if (btnForwardRadio.getSelection()) {
+					doForward = true;
+				} else if (btnBackwardRadio.getSelection()) {
+					doForward = false;
+				} else {
+					//nothing selected
+					return;
+				}
+				computeTraceability(doProject, doForward);
 			}
 		});
 	}
 	
-	private void computeTraceability(boolean doProject) {
+	private void computeTraceability(boolean doProject, boolean doForward) {
+		//erase previous results
+		Compare.UMLClasses.clear();
+		Compare.javaClasses.clear();
+		Compare.results.clear();
+		
+		//Compute new results
 		parseUML();
 		parseJava(doProject);
-		Compare.compare();
+		Compare.compare(doForward);
 		showResultsView();
 	}
 	
@@ -258,8 +278,7 @@ public class SelectView extends ViewPart {
 		}
 		if (resultsView != null) {
 			getSite().getPage().bringToTop(resultsView);
-			ResultsView rv = (ResultsView) resultsView;
-			rv.showResults();
+			resultsView.setFocus(); //triggers table results to refresh
 		}
 	}
 	private void radioSourceSelectionChanged(Button source) {
