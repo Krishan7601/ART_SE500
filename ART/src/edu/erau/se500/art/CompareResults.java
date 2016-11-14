@@ -22,9 +22,13 @@ public class CompareResults {
 	int methodsTotal = 0;
 	int methodsFound = 0;
 	
-	ArrayList<String> methodNames;
-	ArrayList<String> methodParameters;
+	ArrayList<ExtractedAttribute> matchedAttribute;
 	
+	ArrayList<ExtractedMethod> matchedMethods;
+	ArrayList<ExtractedMethod> unmatchedMethods;
+
+	ArrayList<String> methodParameters;
+	ArrayList<Integer> methodParametersTotal;
 	
 	CompareResults(String className) {
 		this.className = className;

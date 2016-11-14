@@ -7,9 +7,9 @@ public class Compare {
 
 	static List<ExtractedClass> UMLClasses = new ArrayList<ExtractedClass>();
 	static List<ExtractedClass> javaClasses = new ArrayList<ExtractedClass>();
-
-	static List<ExtractedClass> matchedClasses = new ArrayList<ExtractedClass>();
 	
+	static List<ExtractedClass> matchedClasses = new ArrayList<ExtractedClass>();
+
 	static List<CompareResults> results = new ArrayList<CompareResults>();
 
 	public static void compare(boolean doForward) {
@@ -25,11 +25,11 @@ public class Compare {
 
 				if (umlClass.name.equals(javaClass.name)) {
 					thisResult.matchFound = true;
-					matchedClasses.add(new ExtractedClass(umlClass.name));
+					ExtractedClass currentMatchedClass = new ExtractedClass(umlClass.name);
 
 					if (umlClass.parentClass.equals(javaClass.parentClass)) {
 						thisResult.parentClassMatchFound = true;
-						matchedClasses.get(matchedClasses.size()).parentClass = umlClass.parentClass;
+						currentMatchedClass.parentClass = umlClass.parentClass;
 					}
 
 					for (String umlInterfaceClass : umlClass.interfaceClasses) {
@@ -38,7 +38,7 @@ public class Compare {
 
 							if (umlInterfaceClass.equals(javaInterfaceClass)) {
 								thisResult.interfaceClassFound++;
-								matchedClasses.get(matchedClasses.size()).interfaceClasses.add(umlInterfaceClass);
+								currentMatchedClass.interfaceClasses.add(umlInterfaceClass);
 								break;
 							}
 						}
@@ -51,18 +51,15 @@ public class Compare {
 							if (umlAttribute.name.toLowerCase().equals(javaAttribute.name.toLowerCase()) && 
 									umlAttribute.type.toLowerCase().equals(javaAttribute.type.toLowerCase())) {
 								thisResult.attributesFound++;
-								matchedClasses.get(matchedClasses.size()).attributes.add(umlAttribute);
+								currentMatchedClass.attributes.add(umlAttribute);
 								if (umlAttribute.accessModifier.equals(javaAttribute.accessModifier)) {
 									thisResult.accessModifiersFound++;
-								}
-								else {
-									matchedClasses.get(matchedClasses.size()).attributes.get(
-											matchedClasses.get(matchedClasses.size()).attributes.size())
 								}
 
 								if ((umlAttribute.isAbstract == javaAttribute.isAbstract) && 
 										(umlAttribute.isFinal == javaAttribute.isFinal) && 
 										(umlAttribute.isStatic == javaAttribute.isStatic)) {
+									
 									thisResult.nonAccessModifiersFound++;									
 								}
 
@@ -78,8 +75,16 @@ public class Compare {
 							if (umlMethod.name.toLowerCase().equals(javaMethod.name.toLowerCase()) && 
 									umlMethod.type.toLowerCase().equals(javaMethod.type.toLowerCase())) {
 								thisResult.methodsFound++;
-								thisResult.methodNames.add(umlMethod.name);
-								thisResult.methodParameters.addAll(umlMethod.parameters);
+								currentMatchedClass.methods.add(umlMethod);
+								
+								for (String umlParameter : umlMethod.parameters) {
+									for (String javaParameter : javaMethod.parameters) {
+
+										if (umlParameter.equals(javaParameter)) {
+											break;
+										}
+									}
+								}
 								break;
 							}
 						}

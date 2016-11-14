@@ -1,10 +1,6 @@
 package edu.erau.se500.art;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
-import javax.tools.JavaFileObject;
 /*
 import com.sun.source.tree.AnnotationTree;
 import com.sun.source.tree.ClassTree;
