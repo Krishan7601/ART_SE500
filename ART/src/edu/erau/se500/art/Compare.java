@@ -55,6 +55,10 @@ public class Compare {
 								if (umlAttribute.accessModifier.equals(javaAttribute.accessModifier)) {
 									thisResult.accessModifiersFound++;
 								}
+								else {
+									matchedClasses.get(matchedClasses.size()).attributes.get(
+											matchedClasses.get(matchedClasses.size()).attributes.size())
+								}
 
 								if ((umlAttribute.isAbstract == javaAttribute.isAbstract) && 
 										(umlAttribute.isFinal == javaAttribute.isFinal) && 
