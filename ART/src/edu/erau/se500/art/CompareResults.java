@@ -1,8 +1,10 @@
 package edu.erau.se500.art;
 
+import java.util.ArrayList;
+
 public class CompareResults {
 
-	String className;
+	String className;	
 	boolean matchFound = false;
 	
 	boolean parentClassMatchFound = false;
@@ -19,6 +21,9 @@ public class CompareResults {
 	
 	int methodsTotal = 0;
 	int methodsFound = 0;
+	
+	ArrayList<String> methodNames;
+	ArrayList<String> methodParameters;
 	
 	
 	CompareResults(String className) {
