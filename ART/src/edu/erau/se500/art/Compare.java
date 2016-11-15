@@ -32,7 +32,6 @@ public class Compare {
 
 					thisResult.matchFound = true;
 					ExtractedClass currentClassMatch = new ExtractedClass(umlClass.name);
-					currentClassUnmatch.name = null;
 
 					if (umlClass.parentClass.equals(javaClass.parentClass)) {
 
