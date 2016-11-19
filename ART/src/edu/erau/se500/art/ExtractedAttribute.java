@@ -6,7 +6,6 @@ public class ExtractedAttribute {
 	AccessModifier accessModifier;
 	boolean isStatic;
 	boolean isFinal;
-	boolean isAbstract;
 	
 	ExtractedAttribute(String name, String type) {
 		this.name = name;
@@ -14,6 +13,5 @@ public class ExtractedAttribute {
 		accessModifier = AccessModifier.NONE;
 		isStatic = false;
 		isFinal = false;
-		isAbstract = false;
 	}
 }
