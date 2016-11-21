@@ -15,6 +15,8 @@ public class CompareResults {
 	int attributesTotal = 0;
 	int attributesFound = 0;
 
+	int attributeTypesFound = 0;
+	
 	int accessModifiersFound = 0;
 
 	int nonAccessModifiersFound = 0;
