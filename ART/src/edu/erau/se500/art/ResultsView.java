@@ -57,7 +57,7 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				CompareResults r = (CompareResults) element;
+				CompareResult r = (CompareResult) element;
 				return r.className;
 			}
 		});
@@ -67,7 +67,7 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				CompareResults r = (CompareResults) element;
+				CompareResult r = (CompareResult) element;
 				if (r.matchFound) return "Yes";
 				else return "No";
 			}
@@ -78,7 +78,7 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				CompareResults r = (CompareResults) element;
+				CompareResult r = (CompareResult) element;
 				return r.attributesFound+"/"+r.attributesTotal;
 			}
 		});
@@ -88,7 +88,7 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				CompareResults r = (CompareResults) element;
+				CompareResult r = (CompareResult) element;
 				return r.methodsFound+"/"+r.methodsTotal;
 			}
 		});
