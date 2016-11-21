@@ -82,9 +82,10 @@ public class Compare {
 					}
 
 					for (ExtractedMethod umlMethod : umlClass.methods) {
-						parameterCount = 0;
-						parameterMatch = 0;
 						thisResult.methodsTotal++;
+						thisResult.unmatchedParameters.addAll(umlMethod.parameters);
+						parameterCount = 0;
+						parameterMatch = 0;					
 						for (ExtractedMethod javaMethod : javaClass.methods) {
 
 							if (umlMethod.name.toLowerCase().equals(javaMethod.name.toLowerCase()) && 
@@ -101,11 +102,11 @@ public class Compare {
 
 									thisResult.methodAccessModifiersFound++;
 								}
-								
+
 								if ((umlMethod.isFinal == javaMethod.isFinal) && 
 										(umlMethod.isStatic == javaMethod.isStatic) && 
 										(umlMethod.isAbstract == javaMethod.isAbstract)) {
-									
+
 									thisResult.methodNonAccessModifiersFound++;
 								}
 
@@ -116,8 +117,9 @@ public class Compare {
 										if (umlParameter.toLowerCase().equals(javaParameter.toLowerCase())) {
 
 											parameterMatch++;
-
-											break;
+											thisResult.matchedParameters.add(umlParameter);
+											thisResult.unmatchedParameters.remove(umlParameter);
+;											break;
 										}
 									}
 								}
