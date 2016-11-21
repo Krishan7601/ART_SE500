@@ -2,7 +2,7 @@ package edu.erau.se500.art;
 
 import java.util.List;
 
-public class ComparedClassResult {
+public class CompareClassResult {
 	String name;
 	boolean isMatched;
 	MatchResult accessMatch;

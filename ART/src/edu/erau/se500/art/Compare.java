@@ -8,7 +8,8 @@ public class Compare {
 	static List<ExtractedClass> UMLClasses = new ArrayList<ExtractedClass>();
 	static List<ExtractedClass> javaClasses = new ArrayList<ExtractedClass>();
 
-	static List<CompareResult> results = new ArrayList<CompareResult>();
+	//static List<CompareResult> results = new ArrayList<CompareResult>();
+	static List<CompareClassResult> results = new ArrayList<CompareClassResult>();
 
 	static int parameterCount;
 	static int parameterMatch;
@@ -23,8 +24,6 @@ public class Compare {
 
 		for (ExtractedClass umlClass : UMLClasses) {
 			CompareResult thisResult = new CompareResult(umlClass.name);
-			results.add(thisResult);
-			thisResult.unmatchedInterfaces = (ArrayList<String>) umlClass.interfaceClasses;
 
 			for (ExtractedClass javaClass : javaClasses) {
 
@@ -44,8 +43,7 @@ public class Compare {
 							if (umlInterfaceClass.toLowerCase().equals(javaInterfaceClass.toLowerCase())) {
 
 								thisResult.interfaceClassFound++;
-								thisResult.matchedInterfaces.add(umlInterfaceClass);
-								thisResult.unmatchedInterfaces.remove(umlInterfaceClass);
+
 								break;
 							}
 						}
@@ -81,8 +79,7 @@ public class Compare {
 					}
 
 					for (ExtractedMethod umlMethod : umlClass.methods) {
-						thisResult.methodsTotal++;
-						thisResult.unmatchedParameters.addAll(umlMethod.parameters);
+
 						parameterCount = 0;
 						parameterMatch = 0;					
 						for (ExtractedMethod javaMethod : javaClass.methods) {
@@ -116,14 +113,11 @@ public class Compare {
 										if (umlParameter.toLowerCase().equals(javaParameter.toLowerCase())) {
 
 											parameterMatch++;
-											thisResult.matchedParameters.add(umlParameter);
-											thisResult.unmatchedParameters.remove(umlParameter);
+
 ;											break;
 										}
 									}
 								}
-								thisResult.methodParameterTotal.add(parameterCount);
-								thisResult.methodParameterFound.add(parameterMatch);
 								break;
 							}
 						}

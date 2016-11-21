@@ -9,8 +9,6 @@ public class CompareResult {
 
 	boolean parentClassMatchFound = false;
 
-	ArrayList<String> matchedInterfaces;
-	ArrayList<String> unmatchedInterfaces;
 	int interfaceClassTotal = 0;
 	int interfaceClassFound = 0;
 
@@ -20,18 +18,11 @@ public class CompareResult {
 	int attributeAccessModifiersFound = 0;
 	int attributeNonAccessModifiersFound = 0;
 
-	ArrayList<String> methodNames;
 	int methodsTotal = 0;
 	int methodsFound = 0;
 	int methodTypesFound = 0;
 	int methodAccessModifiersFound = 0;
 	int methodNonAccessModifiersFound = 0;
-	
-	ArrayList<String> matchedParameters;
-	ArrayList<String> unmatchedParameters;
-	ArrayList<Integer> methodParameterTotal;
-	ArrayList<Integer> methodParameterFound;
-	
 
 	CompareResult(String className) {
 		this.className = className;
