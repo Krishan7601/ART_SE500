@@ -16,16 +16,21 @@ public class CompareResults {
 	int attributesFound = 0;
 
 	int attributeTypesFound = 0;
-	
-	int accessModifiersFound = 0;
-
-	int nonAccessModifiersFound = 0;
+	int attributeAccessModifiersFound = 0;
+	int attributeNonAccessModifiersFound = 0;
 
 	int methodsTotal = 0;
 	int methodsFound = 0;
 	
-	ArrayList<ExtractedClass> matchedClasses;
-	ArrayList<ExtractedClass> unmatchedClasses;
+	int methodTypesFound = 0;
+	int methodAccessModifiersFound = 0;
+	int methodNonAccessModifiersFound = 0;
+	
+	ArrayList<String> matchedInterfaces;
+	ArrayList<String> unmatchedInterfaces;
+	
+	ArrayList<String> matchedParameters;
+	
 	
 	ArrayList<String> methodNames;
 	ArrayList<Integer> methodParameterTotal;
