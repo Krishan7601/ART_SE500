@@ -2,7 +2,7 @@ package edu.erau.se500.art;
 
 import java.util.ArrayList;
 
-public class CompareResults {
+public class CompareResult {
 
 	String className;	
 	boolean matchFound = false;
@@ -33,7 +33,7 @@ public class CompareResults {
 	ArrayList<Integer> methodParameterFound;
 	
 
-	CompareResults(String className) {
+	CompareResult(String className) {
 		this.className = className;
 	}
 }

@@ -8,13 +8,13 @@ public class Compare {
 	static List<ExtractedClass> UMLClasses = new ArrayList<ExtractedClass>();
 	static List<ExtractedClass> javaClasses = new ArrayList<ExtractedClass>();
 
-	static List<CompareResults> results = new ArrayList<CompareResults>();
+	static List<CompareResult> results = new ArrayList<CompareResult>();
 
-	// parameter counts unnecessary if information stored in ExtractedClasses
 	static int parameterCount;
 	static int parameterMatch;
 
 	public static void compare(boolean doForward) {
+		
 		if (doForward) compareForwards();
 		else compareBackwards();
 	}
@@ -22,7 +22,7 @@ public class Compare {
 	private static void compareForwards() {		
 
 		for (ExtractedClass umlClass : UMLClasses) {
-			CompareResults thisResult = new CompareResults(umlClass.name);
+			CompareResult thisResult = new CompareResult(umlClass.name);
 			results.add(thisResult);
 			thisResult.unmatchedInterfaces = (ArrayList<String>) umlClass.interfaceClasses;
 
@@ -54,7 +54,6 @@ public class Compare {
 					for (ExtractedAttribute umlAttribute : umlClass.attributes) {
 						thisResult.attributesTotal++;
 						for (ExtractedAttribute javaAttribute : javaClass.attributes) {
-
 
 							if (umlAttribute.name.toLowerCase().equals(javaAttribute.name.toLowerCase()) && 
 									umlAttribute.type.toLowerCase().equals(javaAttribute.type.toLowerCase())) {
@@ -129,7 +128,6 @@ public class Compare {
 							}
 						}
 					}
-
 					break;
 				}
 			}
