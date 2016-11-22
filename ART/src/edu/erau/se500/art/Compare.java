@@ -164,9 +164,157 @@ public class Compare {
 		}
 	}
 
-	private static void compareBackwards() {
+	private static void compareBackwards() {		
 
+		for (ExtractedClass javaClass : javaClasses) {
+			CompareClassResult thisResult = new CompareClassResult();
+			thisResult.name = javaClass.name;
+			for (ExtractedClass umlClass : UMLClasses) {
+
+				if (javaClass.name.toLowerCase().equals(umlClass.name.toLowerCase())) {
+
+					thisResult.isMatched = true;
+
+					thisResult.parentMatch.sourceValue = javaClass.parentClass;
+					thisResult.parentMatch.compareValue = umlClass.parentClass;
+					if (javaClass.parentClass.toLowerCase().equals(umlClass.parentClass.toLowerCase())) {
+
+						thisResult.parentMatch.isMatched = true;
+					}
+
+					for (String javaInterfaceClass : javaClass.interfaceClasses) {
+						boolean interfaceMatchFound = false;
+						for (String umlInterfaceClass : umlClass.interfaceClasses) {
+
+							if (javaInterfaceClass.toLowerCase().equals(umlInterfaceClass.toLowerCase())) {
+								interfaceMatchFound = true;
+								thisResult.matchedInterfaces.add(javaInterfaceClass);
+								break;
+							}
+						}
+						if (!interfaceMatchFound) {
+							thisResult.unmatchedInterfaces.add(javaInterfaceClass);
+						}
+					}
+				}
+
+				for (ExtractedAttribute javaAttribute : javaClass.attributes) {
+					CompareAttributeResult thisAttribute = new CompareAttributeResult();
+					thisAttribute.name = javaAttribute.name;
+					for (ExtractedAttribute umlAttribute : umlClass.attributes) {
+
+						if (javaAttribute.name.toLowerCase().equals(umlAttribute.name.toLowerCase()) && 
+								javaAttribute.type.toLowerCase().equals(umlAttribute.type.toLowerCase())) {
+
+							thisAttribute.isMatched = true;
+
+							thisAttribute.typeMatch.sourceValue = javaAttribute.type;
+							thisAttribute.typeMatch.compareValue = umlAttribute.type;
+							if (javaAttribute.type.toLowerCase().equals(umlAttribute.type.toLowerCase())) {
+
+								thisAttribute.typeMatch.isMatched = true;
+							}
+
+							thisAttribute.accessMatch.sourceValue = javaAttribute.accessModifier.toString();
+							thisAttribute.accessMatch.compareValue = umlAttribute.accessModifier.toString();
+							if (javaAttribute.accessModifier.equals(umlAttribute.accessModifier)) {
+
+								thisAttribute.accessMatch.isMatched = true;		
+							}
+
+							thisAttribute.finalMatch.sourceValue = booleanToString(javaAttribute.isFinal);
+							thisAttribute.finalMatch.compareValue = booleanToString(umlAttribute.isFinal);
+							if (javaAttribute.isFinal == umlAttribute.isFinal) {
+
+								thisAttribute.finalMatch.isMatched = true;
+							}
+
+							thisAttribute.staticMatch.sourceValue = booleanToString(javaAttribute.isStatic);
+							thisAttribute.staticMatch.compareValue = booleanToString(umlAttribute.isStatic);
+							if (javaAttribute.isStatic == umlAttribute.isStatic) {
+
+								thisAttribute.staticMatch.isMatched = true;
+							}
+
+							thisResult.attributes.add(thisAttribute);
+							break;
+						}
+					}
+				}
+
+				for (ExtractedMethod javaMethod : javaClass.methods) {
+					CompareMethodResult thisMethod = new CompareMethodResult();
+					thisMethod.name = javaMethod.name;
+					for (ExtractedMethod umlMethod : umlClass.methods) {
+
+						if (javaMethod.name.toLowerCase().equals(umlMethod.name.toLowerCase()) && 
+								javaMethod.type.toLowerCase().equals(umlMethod.type.toLowerCase())) {
+
+							thisMethod.isMatched = true;
+
+							thisMethod.returnTypeMatch.sourceValue = javaMethod.type;
+							thisMethod.returnTypeMatch.compareValue = umlMethod.type;
+							if (javaMethod.type.toLowerCase().equals(umlMethod.type.toLowerCase())) {
+
+								thisMethod.returnTypeMatch.isMatched = true;
+							}
+
+							thisMethod.accessMatch.sourceValue = javaMethod.accessModifier.toString();
+							thisMethod.accessMatch.compareValue = umlMethod.accessModifier.toString();
+							if (javaMethod.accessModifier.equals(umlMethod.accessModifier)) {
+
+								thisMethod.accessMatch.isMatched = true;
+							}
+
+							thisMethod.finalMatch.sourceValue = booleanToString(javaMethod.isFinal);
+							thisMethod.finalMatch.compareValue = booleanToString(umlMethod.isFinal);
+							if (javaMethod.isFinal == umlMethod.isFinal) {
+
+								thisMethod.finalMatch.isMatched = true;
+							}
+
+							thisMethod.staticMatch.sourceValue = booleanToString(javaMethod.isStatic);
+							thisMethod.staticMatch.compareValue = booleanToString(umlMethod.isStatic);
+							if (javaMethod.isStatic == umlMethod.isStatic) {
+
+								thisMethod.staticMatch.isMatched = true;
+							}
+
+							thisMethod.abstractMatch.sourceValue = booleanToString(javaMethod.isAbstract);
+							thisMethod.abstractMatch.compareValue = booleanToString(umlMethod.isAbstract);
+							if (javaMethod.isAbstract == umlMethod.isAbstract) {
+
+								thisMethod.abstractMatch.isMatched = true;
+							}
+
+							for (String javaParameter : javaMethod.parameters) {
+								boolean parameterMatchFound = false;
+								for (String umlParameter : umlMethod.parameters) {
+
+									if (javaParameter.toLowerCase().equals(umlParameter.toLowerCase())) {
+
+										thisMethod.matchedParameters.add(javaParameter);
+										break;
+									}
+								}
+								if (!parameterMatchFound) {
+									thisMethod.unmatchedParameters.add(javaParameter);
+								}
+							}
+						}
+						thisResult.methods.add(thisMethod);
+						break;
+					}
+				}
+			}
+			results.add(thisResult);
+			break;
+		}
 	}
+
+
+
+	
 
 	private static String booleanToString(boolean booleanValue) {
 		String booleanString = null;
