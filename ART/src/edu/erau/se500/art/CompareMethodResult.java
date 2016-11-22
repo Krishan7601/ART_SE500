@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CompareMethodResult {
 	String name;
-	boolean isMatched;
+	boolean isMatched = false;
 	MatchResult returnTypeMatch;
 	MatchResult accessMatch;
 	MatchResult abstractMatch;

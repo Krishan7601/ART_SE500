@@ -4,7 +4,7 @@ import java.util.List;
 
 public class CompareClassResult {
 	String name;
-	boolean isMatched;
+	boolean isMatched = false;
 	MatchResult accessMatch;
 	MatchResult finalMatch;
 	MatchResult abstractMatch;
