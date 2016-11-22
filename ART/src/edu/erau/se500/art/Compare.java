@@ -8,6 +8,7 @@ public class Compare {
 	static List<ExtractedClass> UMLClasses = new ArrayList<ExtractedClass>();
 	static List<ExtractedClass> javaClasses = new ArrayList<ExtractedClass>();
 
+	
 	static List<CompareClassResult> results = new ArrayList<CompareClassResult>();
 
 	public static void compare(boolean doForward) {
