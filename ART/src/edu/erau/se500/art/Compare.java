@@ -20,11 +20,11 @@ public class Compare {
 
 		for (ExtractedClass umlClass : UMLClasses) {
 			CompareClassResult thisResult = new CompareClassResult();
+			thisResult.name = umlClass.name;
 			for (ExtractedClass javaClass : javaClasses) {
 
 				if (umlClass.name.toLowerCase().equals(javaClass.name.toLowerCase())) {
 
-					thisResult.name = umlClass.name;
 					thisResult.isMatched = true;
 
 					thisResult.parentMatch.sourceValue = umlClass.parentClass;
@@ -35,29 +35,29 @@ public class Compare {
 					}
 
 					for (String umlInterfaceClass : umlClass.interfaceClasses) {
-						thisResult.unmatchedInterfaces.add(umlInterfaceClass);
+						boolean interfaceMatchFound = false;
 						for (String javaInterfaceClass : javaClass.interfaceClasses) {
 
 							if (umlInterfaceClass.toLowerCase().equals(javaInterfaceClass.toLowerCase())) {
-
+								interfaceMatchFound = true;
 								thisResult.matchedInterfaces.add(umlInterfaceClass);
+								break;
 							}
-							else {
-								thisResult.unmatchedInterfaces.add(umlInterfaceClass);
-							}
-							break;
+						}
+						if (!interfaceMatchFound) {
+							thisResult.unmatchedInterfaces.add(umlInterfaceClass);
 						}
 					}
 				}
 
 				for (ExtractedAttribute umlAttribute : umlClass.attributes) {
 					CompareAttributeResult thisAttribute = new CompareAttributeResult();
+					thisAttribute.name = umlAttribute.name;
 					for (ExtractedAttribute javaAttribute : javaClass.attributes) {
 
 						if (umlAttribute.name.toLowerCase().equals(javaAttribute.name.toLowerCase()) && 
 								umlAttribute.type.toLowerCase().equals(javaAttribute.type.toLowerCase())) {
 
-							thisAttribute.name = umlAttribute.name;
 							thisAttribute.isMatched = true;
 
 							thisAttribute.typeMatch.sourceValue = umlAttribute.type;
@@ -96,12 +96,12 @@ public class Compare {
 
 				for (ExtractedMethod umlMethod : umlClass.methods) {
 					CompareMethodResult thisMethod = new CompareMethodResult();
+					thisMethod.name = umlMethod.name;
 					for (ExtractedMethod javaMethod : javaClass.methods) {
 
 						if (umlMethod.name.toLowerCase().equals(javaMethod.name.toLowerCase()) && 
 								umlMethod.type.toLowerCase().equals(javaMethod.type.toLowerCase())) {
 
-							thisMethod.name = umlMethod.name;
 							thisMethod.isMatched = true;
 
 							thisMethod.returnTypeMatch.sourceValue = umlMethod.type;
@@ -140,16 +140,17 @@ public class Compare {
 							}
 
 							for (String umlParameter : umlMethod.parameters) {
+								boolean parameterMatchFound = false;
 								for (String javaParameter : javaMethod.parameters) {
 
 									if (umlParameter.toLowerCase().equals(javaParameter.toLowerCase())) {
 
 										thisMethod.matchedParameters.add(umlParameter);
+										break;
 									}
-									else {
-										thisMethod.unmatchedParameters.add(umlParameter);
-									}
-									break;
+								}
+								if (!parameterMatchFound) {
+									thisMethod.unmatchedParameters.add(umlParameter);
 								}
 							}
 						}
@@ -162,8 +163,6 @@ public class Compare {
 			break;
 		}
 	}
-
-
 
 	private static void compareBackwards() {
 
