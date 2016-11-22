@@ -22,7 +22,7 @@ public class ResultsView extends ViewPart {
 
 		this.mainPanel = mainPanel;
 
-		viewer = new TableViewer(mainPanel, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		viewer = new TableViewer(mainPanel, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		createColumns(mainPanel, viewer);
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
@@ -57,8 +57,8 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				CompareResult r = (CompareResult) element;
-				return r.className;
+				CompareClassResult r = (CompareClassResult) element;
+				return r.name;
 			}
 		});
 
@@ -67,8 +67,8 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				CompareResult r = (CompareResult) element;
-				if (r.matchFound) return "Yes";
+				CompareClassResult r = (CompareClassResult) element;
+				if (r.isMatched) return "Yes";
 				else return "No";
 			}
 		});
@@ -78,8 +78,9 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				CompareResult r = (CompareResult) element;
-				return r.attributesFound+"/"+r.attributesTotal;
+				//CompareResult r = (CompareResult) element;
+				//return r.attributesFound+"/"+r.attributesTotal;
+				return "!@#$";
 			}
 		});
 
@@ -88,8 +89,9 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				CompareResult r = (CompareResult) element;
-				return r.methodsFound+"/"+r.methodsTotal;
+				//CompareResult r = (CompareResult) element;
+				//return r.methodsFound+"/"+r.methodsTotal;
+				return "$#@!";
 			}
 		});
 
