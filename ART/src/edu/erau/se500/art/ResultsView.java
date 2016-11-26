@@ -5,6 +5,8 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -15,45 +17,33 @@ public class ResultsView extends ViewPart {
 
 	public static final String ID = "edu.erau.se500.art.ResultsView";
 
-	Composite mainPanel;
-	private TableViewer viewer;
+	Composite mainComposite;
+	private TableViewer classTV, attributeTV, methodTV;
+	private SashForm sashForm;
 
-	public void createPartControl(Composite mainPanel) {
+	public void createPartControl(Composite parent) {
+		mainComposite = parent;
+		parent.setLayout(new FillLayout());
+		sashForm = new SashForm(parent, SWT.VERTICAL);
+		
+		createClassTable();
+		createAttributeTable();
+		createMethodTable();
 
-		this.mainPanel = mainPanel;
-
-		viewer = new TableViewer(mainPanel, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
-		createColumns(mainPanel, viewer);
-		final Table table = viewer.getTable();
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-
-		viewer.setContentProvider(new ArrayContentProvider());
-		// get the content for the viewer, setInput will call getElements in the
-		// contentProvider
-		viewer.setInput(Compare.results);
-		// make the selection available to other views
-		getSite().setSelectionProvider(viewer);
-		// set the sorter for the table
-
-		// define layout for the viewer
-		GridData gridData = new GridData();
-		gridData.verticalAlignment = GridData.FILL;
-		gridData.horizontalSpan = 2;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalAlignment = GridData.FILL;
-		viewer.getControl().setLayoutData(gridData);
-
+		sashForm.setWeights(new int[]{2, 1, 1});
 	}
 
-	// create the columns for the table
-	private void createColumns(final Composite parent, final TableViewer viewer) {
+
+	
+	// create the columns for the class table
+	private void createClassTable() {
+		classTV = new TableViewer(sashForm, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		
 		String[] titles = { "Class name", "Matched", "Attributes", "Methods" };
 		int[] bounds = { 200, 100, 100, 100 };
 
 		// first column is for the class name
-		TableViewerColumn col = createTableViewerColumn(titles[0], bounds[0], 0);
+		TableViewerColumn col = createTableViewerColumn(classTV, titles[0], bounds[0], 0);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -63,7 +53,7 @@ public class ResultsView extends ViewPart {
 		});
 
 		// second column is for whether or not match found
-		col = createTableViewerColumn(titles[1], bounds[1], 1);
+		col = createTableViewerColumn(classTV, titles[1], bounds[1], 1);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -74,7 +64,7 @@ public class ResultsView extends ViewPart {
 		});
 
 		// now attribute matches
-		col = createTableViewerColumn(titles[2], bounds[2], 2);
+		col = createTableViewerColumn(classTV, titles[2], bounds[2], 2);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -85,7 +75,74 @@ public class ResultsView extends ViewPart {
 		});
 
 		// now the status married
-		col = createTableViewerColumn(titles[3], bounds[3], 3);
+		col = createTableViewerColumn(classTV, titles[3], bounds[3], 3);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				//CompareResult r = (CompareResult) element;
+				//return r.methodsFound+"/"+r.methodsTotal;
+				return "$#@!";
+			}
+		});
+		
+		final Table classTable = classTV.getTable();
+		classTable.setHeaderVisible(true);
+		classTable.setLinesVisible(true);
+
+		classTV.setContentProvider(new ArrayContentProvider());
+		classTV.setInput(Compare.results);
+		getSite().setSelectionProvider(classTV);
+
+		GridData classGridData = new GridData();
+		classGridData.verticalAlignment = GridData.FILL;
+		classGridData.horizontalSpan = 2;
+		classGridData.grabExcessHorizontalSpace = true;
+		classGridData.grabExcessVerticalSpace = true;
+		classGridData.horizontalAlignment = GridData.FILL;
+		classTV.getControl().setLayoutData(classGridData);
+	}
+	
+	// create the attribute table
+	private void createAttributeTable() {
+		attributeTV = new TableViewer(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		
+		String[] titles = { "Attribute name", "Matched", "Attributes", "Methods" };
+		int[] bounds = { 200, 100, 100, 100 };
+
+		// first column is for the class name
+		TableViewerColumn col = createTableViewerColumn(attributeTV, titles[0], bounds[0], 0);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				CompareClassResult r = (CompareClassResult) element;
+				return r.name;
+			}
+		});
+
+		// second column is for whether or not match found
+		col = createTableViewerColumn(attributeTV, titles[1], bounds[1], 1);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				CompareClassResult r = (CompareClassResult) element;
+				if (r.isMatched) return "Yes";
+				else return "No";
+			}
+		});
+
+		// now attribute matches
+		col = createTableViewerColumn(attributeTV, titles[2], bounds[2], 2);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				//CompareResult r = (CompareResult) element;
+				//return r.attributesFound+"/"+r.attributesTotal;
+				return "!@#$";
+			}
+		});
+
+		// now the status married
+		col = createTableViewerColumn(attributeTV, titles[3], bounds[3], 3);
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -95,10 +152,71 @@ public class ResultsView extends ViewPart {
 			}
 		});
 
+		final Table attributeTable = attributeTV.getTable();
+		attributeTable.setHeaderVisible(true);
+		attributeTable.setLinesVisible(true);
+		
+		//TODO MORE
+	}
+	
+	private void createMethodTable() {
+		methodTV = new TableViewer(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		
+		String[] titles = { "Method name", "Matched", "Attributes", "Methods" };
+		int[] bounds = { 200, 100, 100, 100 };
+
+		// first column is for the class name
+		TableViewerColumn col = createTableViewerColumn(methodTV, titles[0], bounds[0], 0);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				CompareClassResult r = (CompareClassResult) element;
+				return r.name;
+			}
+		});
+
+		// second column is for whether or not match found
+		col = createTableViewerColumn(methodTV, titles[1], bounds[1], 1);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				CompareClassResult r = (CompareClassResult) element;
+				if (r.isMatched) return "Yes";
+				else return "No";
+			}
+		});
+
+		// now attribute matches
+		col = createTableViewerColumn(methodTV, titles[2], bounds[2], 2);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				//CompareResult r = (CompareResult) element;
+				//return r.attributesFound+"/"+r.attributesTotal;
+				return "!@#$";
+			}
+		});
+
+		// now the status married
+		col = createTableViewerColumn(methodTV, titles[3], bounds[3], 3);
+		col.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				//CompareResult r = (CompareResult) element;
+				//return r.methodsFound+"/"+r.methodsTotal;
+				return "$#@!";
+			}
+		});
+
+		final Table methodTable = methodTV.getTable();
+		methodTable.setHeaderVisible(true);
+		methodTable.setLinesVisible(true);
+		
+		//TODO MORE
 	}
 
-	private TableViewerColumn createTableViewerColumn(String title, int bound, final int colNumber) {
-		final TableViewerColumn viewerColumn = new TableViewerColumn(viewer,SWT.NONE);
+	private TableViewerColumn createTableViewerColumn(TableViewer thisViewer, String title, int bound, final int colNumber) {
+		final TableViewerColumn viewerColumn = new TableViewerColumn(thisViewer,SWT.NONE);
 		final TableColumn column = viewerColumn.getColumn();
 		column.setText(title);
 		column.setWidth(bound);
@@ -108,7 +226,8 @@ public class ResultsView extends ViewPart {
 	}
 
 	public void setFocus() {
-		mainPanel.setFocus();
-		viewer.refresh();
+		mainComposite.setFocus();
+		classTV.refresh();
+		//TODO: refresh other tables
 	}
 }

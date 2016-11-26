@@ -25,23 +25,23 @@ public class SelectView extends ViewPart {
 	
 	public static final String ID = "edu.erau.se500.art.SelectView";
 	
-	Composite mainPanel;
+	Composite mainComposite;
 	File umlFile, javaFile, projectDirectory;
 	Button btnProjectRadio, btnSingleRadio;
 	Label lblFilenameProject, lblFilenameSingle;
 	Button btnBrowseProject, btnBrowseSingle;
 	Button btnForwardRadio, btnBackwardRadio;
 	
-	public void createPartControl(Composite mainPanel) {
+	public void createPartControl(Composite parent) {
 		
-		this.mainPanel = mainPanel;
+		mainComposite = parent;
 	    
 	    RowLayout overallLayout = new RowLayout ();
 		overallLayout.type = SWT.VERTICAL;
 		overallLayout.spacing = 5;
-		mainPanel.setLayout (overallLayout);
+		parent.setLayout (overallLayout);
 
-		Group grpUML = new Group (mainPanel, SWT.NONE);
+		Group grpUML = new Group (parent, SWT.NONE);
 		grpUML.setText ("UML Class Diagram");
 		
 		Label lblFilenameUML = new Label (grpUML, SWT.NONE);
@@ -71,7 +71,7 @@ public class SelectView extends ViewPart {
 		
 		grpUML.pack();
 
-		Group grpCode = new Group (mainPanel, SWT.NONE);
+		Group grpCode = new Group (parent, SWT.NONE);
 		grpCode.setText ("Source Code");
 
 	    btnProjectRadio = new Button(grpCode, SWT.RADIO);
@@ -148,7 +148,7 @@ public class SelectView extends ViewPart {
 	    
 	    grpCode.pack();
 	    
-		Group grpDirection = new Group (mainPanel, SWT.NONE);
+		Group grpDirection = new Group (parent, SWT.NONE);
 		grpDirection.setText ("Direction");
 		grpDirection.setSize(200, 50);
 		
@@ -165,7 +165,7 @@ public class SelectView extends ViewPart {
 		
 		grpDirection.pack();
 	    
-		Button btnCompute = new Button(mainPanel, SWT.PUSH);
+		Button btnCompute = new Button(parent, SWT.PUSH);
 		btnCompute.setText("Compute Traceability");
 		btnCompute.pack();
 		btnCompute.addSelectionListener(new SelectionAdapter() {
@@ -176,7 +176,7 @@ public class SelectView extends ViewPart {
 				
 				//check uml source
 				if (umlFile == null) {
-					MessageBox mb = new MessageBox(mainPanel.getShell(), SWT.ICON_ERROR | SWT.OK);
+					MessageBox mb = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);
 					mb.setText("Error");
 					mb.setMessage("No UML Class Diagram was selected.");
 					mb.open();
@@ -185,7 +185,7 @@ public class SelectView extends ViewPart {
 				//check java source
 				if (btnProjectRadio.getSelection()) {
 					if (projectDirectory == null) {
-						MessageBox mb = new MessageBox(mainPanel.getShell(), SWT.ICON_ERROR | SWT.OK);
+						MessageBox mb = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);
 						mb.setText("Error");
 						mb.setMessage("No project directory was selected.");
 						mb.open();
@@ -195,7 +195,7 @@ public class SelectView extends ViewPart {
 					}
 				} else if (btnSingleRadio.getSelection()) {
 					if (javaFile == null) {
-						MessageBox mb = new MessageBox(mainPanel.getShell(), SWT.ICON_ERROR | SWT.OK);
+						MessageBox mb = new MessageBox(parent.getShell(), SWT.ICON_ERROR | SWT.OK);
 						mb.setText("Error");
 						mb.setMessage("No java file was selected.");
 						mb.open();
@@ -235,7 +235,8 @@ public class SelectView extends ViewPart {
 	}
 	
 	private void parseUML() {
-		File genSrcDir = new File("src-gen");
+		File genSrcDir = new File(System.getProperty("user.dir")+File.separator+"src-gen");
+		System.out.println(genSrcDir.getAbsolutePath());
 		if (!genSrcDir.exists()) genSrcDir.mkdir();
 		else {
 			emptyDirectory(genSrcDir);
@@ -246,7 +247,8 @@ public class SelectView extends ViewPart {
 		try {
 			Generate g = new Generate(model, genSrcDir, arguments);
 			g.doGenerate(null);
-			JavaExtractor.collectFiles(genSrcDir, true);
+			JavaExtractor.fromUML = true;
+			JavaExtractor.collectFiles(genSrcDir);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -254,10 +256,11 @@ public class SelectView extends ViewPart {
 	
 	private void parseJava(boolean doProject) {
 		try {
+			JavaExtractor.fromUML = false;
 			if (doProject) {
-				JavaExtractor.collectFiles(projectDirectory, false);
+				JavaExtractor.collectFiles(projectDirectory);
 			} else {
-				JavaExtractor.extractFromFile(javaFile, false);
+				JavaExtractor.extractFromFile(javaFile);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -307,7 +310,7 @@ public class SelectView extends ViewPart {
 	}
 	
 	public void setFocus() {
-		mainPanel.setFocus();
+		mainComposite.setFocus();
 	}
 
 }
