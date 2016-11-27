@@ -2,30 +2,34 @@
 [module generate('http://www.eclipse.org/uml2/5.0.0/UML')]
 
 [template public generate(aClass : Class)]
+
 [comment @main /] 
 [comment code to generate class/]
 [file (aClass.name.toUpperFirst().concat('.java'), false)]
+
 [aClass.visibility/][if (aClass.isAbstract)] abstract[/if] class [aClass.name.replaceAll('[ .]', '').toUpperFirst()/] 
 [for (superC : Class | aClass.superClass)
 		before('extends ')
 		separator(',')]
-	[superC.name/]
+[superC.name/]
 [/for] 
 [for(interf: Interface | aClass.getImplementedInterfaces()) 
 		before ('implements ') 
 		separator(',')] 
 	[interf.name/]
-[/for]
+[/for] {
+
 [comment code to generate attributes/]
-{
 [for (p: Property | aClass.attribute) separator('\n')]
-	[p.visibility/] [p.type.name.replaceAll(' ', '')/] [p.name.replaceAll(' ', '')/];
+[p.visibility/] [p.type.name.replaceAll(' ', '')/] [p.name.replaceAll(' ', '')/];
 [/for]
+
 [comment code to generate methods/]
 [for (o: Operation | aClass.ownedOperation) separator('\n')] 
-	[o.visibility /] [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]() {
-}
+[o.visibility/] [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]([for(a: Parameter | o.ownedParameter) separator(', ')][a.type.name/] [a.name/][/for]) 
 [/for]
+
 }
 [/file]
+
 [/template]
