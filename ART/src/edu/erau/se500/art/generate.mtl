@@ -2,20 +2,30 @@
 [module generate('http://www.eclipse.org/uml2/5.0.0/UML')]
 
 [template public generate(aClass : Class)]
-
-[comment @main /]
- [file (aClass.name.toUpperFirst().concat('.java'), false)]
-   public class [aClass.name.replaceAll('[ .]', '').toUpperFirst()/] {
-
-     [for (p: Property | aClass.attribute) separator('\n')]
-       private [p.type.name.replaceAll(' ', '')/] [p.name.replaceAll(' ', '')/];
-     [/for]
- 
-     [for (o: Operation | aClass.ownedOperation) separator('\n')]
-       public [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]() {
-         // TODO should be implemented
-       }
-     [/for]
-   }
- [/file]
- [/template]
+[comment @main /] 
+[comment code to generate class/]
+[file (aClass.name.toUpperFirst().concat('.java'), false)]
+[aClass.visibility/][if (aClass.isAbstract)] abstract[/if] class [aClass.name.replaceAll('[ .]', '').toUpperFirst()/] 
+[for (superC : Class | aClass.superClass)
+		before('extends ')
+		separator(',')]
+	[superC.name/]
+[/for] 
+[for(interf: Interface | aClass.getImplementedInterfaces()) 
+		before ('implements ') 
+		separator(',')] 
+	[interf.name/]
+[/for]
+[comment code to generate attributes/]
+{
+[for (p: Property | aClass.attribute) separator('\n')]
+	[p.visibility/] [p.type.name.replaceAll(' ', '')/] [p.name.replaceAll(' ', '')/];
+[/for]
+[comment code to generate methods/]
+[for (o: Operation | aClass.ownedOperation) separator('\n')] 
+	[o.visibility /] [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]() {
+}
+[/for]
+}
+[/file]
+[/template]
