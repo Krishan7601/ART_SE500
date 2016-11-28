@@ -366,12 +366,17 @@ public class ResultsView extends ViewPart {
 		int[] bounds = { 200, 100, 100, 100, 100, 100, 100 };
 
 		TableViewerColumn col = createTableViewerColumn(methodTV, titles[0], bounds[0], 0);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareMethodResult r = (CompareMethodResult) element;
-				return r.name;
-			}
+			public void update(final ViewerCell cell) {
+				CompareMethodResult r = (CompareMethodResult) cell.getElement();
+				if (r.isMatched) {
+					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+				} else {
+					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_MAGENTA));
+				}
+				cell.setText(r.name);
+			}			
 		});
 
 		col = createTableViewerColumn(methodTV, titles[1], bounds[1], 1);
@@ -379,8 +384,22 @@ public class ResultsView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				CompareMethodResult r = (CompareMethodResult) element;
-				if (r.isMatched) return "Yes";
+				if (!r.isMatched) return null;
+				if (r.returnTypeMatch.isMatched) return "Yes";
 				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.returnTypeMatch.sourceValue, r.returnTypeMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 
@@ -388,9 +407,23 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				//CompareResult r = (CompareResult) element;
-				//return r.attributesFound+"/"+r.attributesTotal;
-				return "!@#$";
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (!r.isMatched) return null;
+				if (r.accessMatch.isMatched) return "Yes";
+				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.accessMatch.sourceValue, r.accessMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 
@@ -398,9 +431,23 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				//CompareResult r = (CompareResult) element;
-				//return r.methodsFound+"/"+r.methodsTotal;
-				return "$#@!";
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (!r.isMatched) return null;
+				if (r.abstractMatch.isMatched) return "Yes";
+				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.abstractMatch.sourceValue, r.abstractMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 		
@@ -408,9 +455,23 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				//CompareResult r = (CompareResult) element;
-				//return r.methodsFound+"/"+r.methodsTotal;
-				return "$#@!";
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (!r.isMatched) return null;
+				if (r.staticMatch.isMatched) return "Yes";
+				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.staticMatch.sourceValue, r.staticMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 		
@@ -418,9 +479,23 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				//CompareResult r = (CompareResult) element;
-				//return r.methodsFound+"/"+r.methodsTotal;
-				return "$#@!";
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (!r.isMatched) return null;
+				if (r.finalMatch.isMatched) return "Yes";
+				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.finalMatch.sourceValue, r.finalMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 		
@@ -428,9 +503,22 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				//CompareResult r = (CompareResult) element;
-				//return r.methodsFound+"/"+r.methodsTotal;
-				return "$#@!";
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (!r.isMatched) return null;
+				return r.matchedParameters.size()+"/"+(r.matchedParameters.size()+r.unmatchedParameters.size());
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareMethodResult r = (CompareMethodResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Matched", "Unmatched", r.matchedParameters, r.unmatchedParameters);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 
