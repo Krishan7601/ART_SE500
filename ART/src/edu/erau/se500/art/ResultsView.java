@@ -201,6 +201,7 @@ public class ResultsView extends ViewPart {
 				if (thisClass != null) {
 					attributeTV.setInput(thisClass.attributes);
 					methodTV.setInput(thisClass.methods);
+					attributeTV.refresh();
 				}
 			}
 		});
@@ -224,18 +225,25 @@ public class ResultsView extends ViewPart {
 
 	// create the attribute table
 	private void createAttributeTable() {
-		attributeTV = new TableViewer(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		attributeTV = new TableViewer(sashForm, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		
+		ColumnViewerToolTipSupport.enableFor(attributeTV);
 
 		String[] titles = { "Attribute name", "Type", "Access", "Static", "Final" };
 		int[] bounds = { 200, 100, 100, 100, 100 };
 
 		TableViewerColumn col = createTableViewerColumn(attributeTV, titles[0], bounds[0], 0);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareAttributeResult r = (CompareAttributeResult) element;
-				return r.name;
-			}
+			public void update(final ViewerCell cell) {
+				CompareAttributeResult r = (CompareAttributeResult) cell.getElement();
+				if (r.isMatched) {
+					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+				} else {
+					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_MAGENTA));
+				}
+				cell.setText(r.name);
+			}			
 		});
 
 		col = createTableViewerColumn(attributeTV, titles[1], bounds[1], 1);
@@ -243,8 +251,22 @@ public class ResultsView extends ViewPart {
 			@Override
 			public String getText(Object element) {
 				CompareAttributeResult r = (CompareAttributeResult) element;
-				if (r.isMatched) return "Yes";
+				if (!r.isMatched) return null;
+				if (r.typeMatch.isMatched) return "Yes";
 				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareAttributeResult r = (CompareAttributeResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.typeMatch.sourceValue, r.typeMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 
@@ -252,9 +274,23 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				//CompareResult r = (CompareResult) element;
-				//return r.attributesFound+"/"+r.attributesTotal;
-				return "!@#$";
+				CompareAttributeResult r = (CompareAttributeResult) element;
+				if (!r.isMatched) return null;
+				if (r.accessMatch.isMatched) return "Yes";
+				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareAttributeResult r = (CompareAttributeResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.accessMatch.sourceValue, r.accessMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 
@@ -262,9 +298,23 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				//CompareResult r = (CompareResult) element;
-				//return r.methodsFound+"/"+r.methodsTotal;
-				return "$#@!";
+				CompareAttributeResult r = (CompareAttributeResult) element;
+				if (!r.isMatched) return null;
+				if (r.staticMatch.isMatched) return "Yes";
+				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareAttributeResult r = (CompareAttributeResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.staticMatch.sourceValue, r.staticMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 		
@@ -272,9 +322,23 @@ public class ResultsView extends ViewPart {
 		col.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				//CompareResult r = (CompareResult) element;
-				//return r.methodsFound+"/"+r.methodsTotal;
-				return "$#@!";
+				CompareAttributeResult r = (CompareAttributeResult) element;
+				if (!r.isMatched) return null;
+				if (r.finalMatch.isMatched) return "Yes";
+				else return "No";
+			}
+			@Override
+			public String getToolTipText(Object element) {
+				CompareAttributeResult r = (CompareAttributeResult) element;
+				if (r.isMatched) {
+					return generateTooltip("Source Value", "Compare Value", r.finalMatch.sourceValue, r.finalMatch.compareValue);
+				} else {
+					return null;
+				}
+			}
+			@Override
+			public Font getToolTipFont(Object element) {			
+				return tooltipFont;
 			}
 		});
 
@@ -294,7 +358,9 @@ public class ResultsView extends ViewPart {
 	}
 
 	private void createMethodTable() {
-		methodTV = new TableViewer(sashForm, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		methodTV = new TableViewer(sashForm, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
+		
+		ColumnViewerToolTipSupport.enableFor(methodTV);
 
 		String[] titles = { "Method name", "Return Type", "Access", "Abstract", "Static", "Final", "Parameters" };
 		int[] bounds = { 200, 100, 100, 100, 100, 100, 100 };
@@ -422,15 +488,16 @@ public class ResultsView extends ViewPart {
 		for (int i = 0; i < head2.length(); i++) {
 			line2.append("-");
 		}
-		sb.append(line2.toString()+"\n");
+		sb.append(line2.toString());
 		
 		for (int i = 0; i < dataSize; i++) {
-			if (data1.get(i) != null) {
+			sb.append("\n");
+			if (data1.size() >= (i+1) && data1.get(i) != null) {
 				sb.append(String.format("%-"+strLength+"s", data1.get(i)));
 			} else {
 				sb.append(String.format("%-"+strLength+"s", " "));
 			}
-			if (data2.get(i) != null) {
+			if (data2.size() >= (i+1) && data2.get(i) != null) {
 				sb.append(data2.get(i));
 			}
 		}

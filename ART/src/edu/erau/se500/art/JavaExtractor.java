@@ -50,7 +50,6 @@ public class JavaExtractor {
 		try {
 			cu = JavaParser.parse(in);
 
-
 			for (TypeDeclaration<?> td : cu.getTypes()) {
 				c =new ExtractedClass(td.getName());
 
@@ -82,9 +81,6 @@ public class JavaExtractor {
 					a.accessModifier=AccessModifier.PRIVATE;
 				}
 				else if(fd.isProtected()){
-					a.accessModifier=AccessModifier.PROTECTED;
-				}
-				if(fd.isAbstract()){
 					a.accessModifier=AccessModifier.PROTECTED;
 				} 
 				if(fd.isStatic()){
@@ -121,7 +117,6 @@ public class JavaExtractor {
 		} else if (node instanceof ClassOrInterfaceDeclaration) {
 			ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration) node;
 			System.out.println("Class: "+cd.getName()+" AccessModifer:"+" isPrivate: "+cd.isPrivate()+" isProtected: "+cd.isProtected()+" isPublic: "+cd.isPublic()+" Non-Accessmodifer:"+" isAbstract: "+cd.isAbstract());
-			ExtractedClass c = new ExtractedClass(cd.getName());
 			
 			//Access Modifiers
 			if(cd.isPublic()){
@@ -148,7 +143,7 @@ public class JavaExtractor {
 			NodeList<ClassOrInterfaceType> parentList = cd.getExtends();
 			for (ClassOrInterfaceType thisClass : parentList) {
 				c.parentClass = thisClass.getName(); //SHOULD NOT OCCUR MORE THAN ONCE
-				System.out.println(" - EXTENDS - "+thisClass.getName());
+				System.out.println(" - EXTENDS - "+thisClass.getName()+" --- "+c.parentClass);
 			}
 			
 			NodeList<ClassOrInterfaceType> interfaceList = cd.getImplements();
