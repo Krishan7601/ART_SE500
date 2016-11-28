@@ -268,15 +268,7 @@ public class SelectView extends ViewPart {
 	}
 	
 	private void showResultsView() {
-		IWorkbenchPage page = getSite().getPage();
-		IViewPart resultsView = page.findView("edu.erau.se500.art.ResultsView");
-		if (resultsView == null) {
-			try {
-				resultsView = page.showView("edu.erau.se500.art.ResultsView");
-			} catch (PartInitException e) {
-				e.printStackTrace();
-			}
-		}
+		IViewPart resultsView = getResultsView();
 		if (resultsView != null) {
 			getSite().getPage().bringToTop(resultsView);
 			resultsView.setFocus(); //triggers table results to refresh
@@ -307,6 +299,19 @@ public class SelectView extends ViewPart {
 	       listOfFiles[i].delete();
 	      }
 	    }
+	}
+	
+	private IViewPart getResultsView() {
+		IWorkbenchPage page = getSite().getPage();
+		IViewPart resultsView = page.findView("edu.erau.se500.art.ResultsView");
+		if (resultsView == null) {
+			try {
+				resultsView = page.showView("edu.erau.se500.art.ResultsView");
+			} catch (PartInitException e) {
+				e.printStackTrace();
+			}
+		}
+		return resultsView;
 	}
 	
 	public void setFocus() {

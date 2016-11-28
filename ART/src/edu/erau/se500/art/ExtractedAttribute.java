@@ -10,7 +10,7 @@ public class ExtractedAttribute {
 	ExtractedAttribute(String name, String type) {
 		this.name = name;
 		this.type = type;
-		accessModifier = AccessModifier.NONE;
+		accessModifier = AccessModifier.DEFAULT;
 		isStatic = false;
 		isFinal = false;
 	}

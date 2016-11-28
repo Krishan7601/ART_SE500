@@ -13,6 +13,7 @@ import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 public class JavaExtractor {
 
@@ -77,10 +78,10 @@ public class JavaExtractor {
 				if(fd.isPublic()){
 					a.accessModifier=AccessModifier.PUBLIC;
 				}
-				if(fd.isPrivate()){
+				else if(fd.isPrivate()){
 					a.accessModifier=AccessModifier.PRIVATE;
 				}
-				if(fd.isProtected()){
+				else if(fd.isProtected()){
 					a.accessModifier=AccessModifier.PROTECTED;
 				}
 				if(fd.isAbstract()){
@@ -102,10 +103,10 @@ public class JavaExtractor {
 			if(md.isPublic()){
 				m.accessModifier=AccessModifier.PUBLIC;
 			}
-			if(md.isPrivate()){
+			else if(md.isPrivate()){
 				m.accessModifier=AccessModifier.PRIVATE;
 			}
-			if(md.isProtected()){
+			else if(md.isProtected()){
 				m.accessModifier=AccessModifier.PROTECTED;
 			}
 			if(md.isAbstract()){
@@ -119,79 +120,46 @@ public class JavaExtractor {
 			}
 		} else if (node instanceof ClassOrInterfaceDeclaration) {
 			ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration) node;
-			if (cd.isInterface()){
-				System.out.println("Interface: "+cd.getName());
-				ExtractedClass   c = new ExtractedClass(cd.getName());
-				c.interfaceClasses.add(c.getClass().getName());
-				if(cd.isPublic()){
-					c.accessModifier=AccessModifier.PUBLIC;
-				}
-				if(cd.isPrivate()){
-					c.accessModifier=AccessModifier.PRIVATE;
-				}
-				if(cd.isProtected()){
-					c.accessModifier=AccessModifier.PROTECTED;
-				}
-				if(cd.isAbstract()){
-					c.isAbstract=cd.isAbstract();
-				} 
-				if(cd.isStatic()){
-					c.isStatic=cd.isStatic();
-				}
-				if(cd.isFinal()){
-					c.isFinal=cd.isFinal();
-				}
-			} else if(cd.isAbstract()){
-				System.out.println("AbstractClass: "+cd.getName()+" AccessModifer"+" isPrivate: "+cd.isPrivate()+" isProtected: "+cd.isProtected()+" isPublic: "+cd.isPublic()+" Non-Accessmodifer:"+" isAbstract: "+cd.isAbstract());
-				c = new ExtractedClass(cd.getName());
-
-
-				if(cd.isPublic()){
-					c.accessModifier=AccessModifier.PUBLIC;
-				}
-				if(cd.isPrivate()){
-					c.accessModifier=AccessModifier.PRIVATE;
-				}
-				if(cd.isProtected()){
-					c.accessModifier=AccessModifier.PROTECTED;
-				}
-				if(cd.isAbstract()){
-					c.isAbstract=cd.isAbstract();
-				} 
-				if(cd.isStatic()){
-					c.isStatic=cd.isStatic();
-				}
-				if(cd.isFinal()){
-					c.isFinal=cd.isFinal();
-				}
-			} else{
-				System.out.println("NormalClass: "+cd.getName()+""+" AccessModifer"+" isPrivate: "+cd.isPrivate()+" isProtected: "+cd.isProtected()+" isPublic: "+cd.isPublic()+" Non-Accessmodifer:"+" isAbstract: "+cd.isAbstract());
-
-				ExtractedClass c = new ExtractedClass(cd.getName());
-				c.interfaceClasses.add(c.getClass().getName());
-				if(cd.isPublic()){
-					c.accessModifier=AccessModifier.PUBLIC;
-				}
-				if(cd.isPrivate()){
-					c.accessModifier=AccessModifier.PRIVATE;
-				}
-				if(cd.isProtected()){
-					c.accessModifier=AccessModifier.PROTECTED;
-				}
-				if(cd.isAbstract()){
-					c.isAbstract=cd.isAbstract();
-				} 
-				if(cd.isStatic()){
-					c.isStatic=cd.isStatic();
-				}
-				if(cd.isFinal()){
-					c.isFinal=cd.isFinal();
-				}
+			System.out.println("Class: "+cd.getName()+" AccessModifer:"+" isPrivate: "+cd.isPrivate()+" isProtected: "+cd.isProtected()+" isPublic: "+cd.isPublic()+" Non-Accessmodifer:"+" isAbstract: "+cd.isAbstract());
+			ExtractedClass c = new ExtractedClass(cd.getName());
+			
+			//Access Modifiers
+			if(cd.isPublic()){
+				c.accessModifier=AccessModifier.PUBLIC;
 			}
-			//RECURSIVE
-			for (Node child : node.getChildrenNodes()){
-				processNode(child);
+			else if(cd.isPrivate()){
+				c.accessModifier=AccessModifier.PRIVATE;
 			}
-		} 
+			else if(cd.isProtected()){
+				c.accessModifier=AccessModifier.PROTECTED;
+			}
+			
+			//Non-Access Modifiers
+			if(cd.isAbstract()){
+				c.isAbstract=cd.isAbstract();
+			} 
+			if(cd.isStatic()){
+				c.isStatic=cd.isStatic();
+			}
+			if(cd.isFinal()){
+				c.isFinal=cd.isFinal();
+			}
+			
+			NodeList<ClassOrInterfaceType> parentList = cd.getExtends();
+			for (ClassOrInterfaceType thisClass : parentList) {
+				c.parentClass = thisClass.getName(); //SHOULD NOT OCCUR MORE THAN ONCE
+				System.out.println(" - EXTENDS - "+thisClass.getName());
+			}
+			
+			NodeList<ClassOrInterfaceType> interfaceList = cd.getImplements();
+			for (ClassOrInterfaceType thisClass : interfaceList) {
+				c.interfaceClasses.add(thisClass.getName());
+				System.out.println(" - IMPLEMENTS - "+thisClass.getName());
+			}
+		}
+		//RECURSIVE
+		for (Node child : node.getChildrenNodes()){
+			processNode(child);
+		}
 	}
 }
