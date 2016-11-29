@@ -59,7 +59,7 @@ public class SelectView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog dlg = new FileDialog(btnBrowseUML.getShell(),  SWT.OPEN  );
 				dlg.setText("Select Class Diagram");
-				final String[] allowedExtensions = {"*.uml; *.ucls; *.xml"};
+				final String[] allowedExtensions = {"*.uml"};
 				dlg.setFilterExtensions(allowedExtensions);
 				String path = dlg.open();
 				if (path == null) return;
