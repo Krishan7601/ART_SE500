@@ -11,6 +11,7 @@ import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
@@ -94,6 +95,7 @@ public class JavaExtractor {
 		else if (node instanceof MethodDeclaration) {
 			MethodDeclaration md = (MethodDeclaration)node;
 			System.out.println("- method: "+" type: "+md.getType()+" name: "+md.getName()+" AccessModifer"+" isPrivate: "+md.isPrivate()+" isProtected: "+md.isProtected()+" isPublic: "+md.isPublic()+" Non-Accessmodifer:"+" isAbstract: "+md.isAbstract());
+			System.out.println(md.getDeclarationAsString());
 			ExtractedMethod m = new ExtractedMethod(md.getName(), md.getType().toString());
 			c.methods.add(m);
 			if(md.isPublic()){
@@ -113,6 +115,11 @@ public class JavaExtractor {
 			}
 			if(md.isFinal()){
 				m.isFinal=md.isFinal();
+			}
+			NodeList<Parameter> parameterList = md.getParameters();
+			for (Parameter thisParameter : parameterList) {
+				m.addParameter(thisParameter.getElementType().toString(), thisParameter.getName());
+				System.out.println(" - PARAMETER - "+thisParameter.getElementType().toString()+" "+thisParameter.getName());
 			}
 		} else if (node instanceof ClassOrInterfaceDeclaration) {
 			ClassOrInterfaceDeclaration cd = (ClassOrInterfaceDeclaration) node;

@@ -511,7 +511,7 @@ public class ResultsView extends ViewPart {
 			public String getToolTipText(Object element) {
 				CompareMethodResult r = (CompareMethodResult) element;
 				if (r.isMatched) {
-					return generateTooltip("Matched", "Unmatched", r.matchedParameters, r.unmatchedParameters);
+					return generateTooltipFromListofArrays("Matched", "Unmatched", r.matchedParameters, r.unmatchedParameters);
 				} else {
 					return null;
 				}
@@ -597,6 +597,18 @@ public class ResultsView extends ViewPart {
 		List<String> d2 = new ArrayList<String>();
 		d1.add(data1);
 		d2.add(data2);
+		return generateTooltip(head1, head2, d1, d2);
+	}
+	
+	private String generateTooltipFromListofArrays(String head1, String head2, List<String[]> data1, List<String[]> data2) {
+		List<String> d1 = new ArrayList<String>();
+		List<String> d2 = new ArrayList<String>();
+		for (String[] dataArray : data1) {
+			d1.add(dataArray[0]+" "+dataArray[1]);
+		}
+		for (String[] dataArray : data2) {
+			d2.add(dataArray[0]+" "+dataArray[1]);
+		}
 		return generateTooltip(head1, head2, d1, d2);
 	}
 

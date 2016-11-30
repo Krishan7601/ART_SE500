@@ -14,7 +14,7 @@
 [superC.name/]
 [/for] 
 [for(interf: Interface | aClass.getImplementedInterfaces()) 
-		before ('implements ') 
+		before ('implements ')
 		separator(',')] 
 	[interf.name/]
 [/for] {
@@ -26,7 +26,7 @@
 
 [comment code to generate methods/]
 [for (o: Operation | aClass.ownedOperation) separator('\n')] 
-[if (o.visibility.toString().equalsIgnoreCase('package'))][else][o.visibility/][/if] [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]([for(a: Parameter | o.ownedParameter) separator(', ')][a.type.name/] [a.name/][/for]) {} 
+[if (o.visibility.toString().equalsIgnoreCase('package'))][else][o.visibility/][/if] [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]([for(p: Parameter | o.ownedParameter) separator(', ')][p.type.name/] [p.name/][/for]) {} 
 [/for]
 
 }

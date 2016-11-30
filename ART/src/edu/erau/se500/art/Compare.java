@@ -75,8 +75,7 @@ public class Compare {
 						thisAttribute.name = sourceAttribute.name;
 						for (ExtractedAttribute compareAttribute : compareClass.attributes) {
 
-							if (sourceAttribute.name.toLowerCase().equals(compareAttribute.name.toLowerCase()) && 
-									sourceAttribute.type.toLowerCase().equals(compareAttribute.type.toLowerCase())) {
+							if (sourceAttribute.name.toLowerCase().equals(compareAttribute.name.toLowerCase())) {
 
 								thisAttribute.isMatched = true;
 
@@ -115,8 +114,7 @@ public class Compare {
 						thisMethod.name = sourceMethod.name;
 						for (ExtractedMethod compareMethod : compareClass.methods) {
 
-							if (sourceMethod.name.toLowerCase().equals(compareMethod.name.toLowerCase()) && 
-									sourceMethod.type.toLowerCase().equals(compareMethod.type.toLowerCase())) {
+							if (sourceMethod.name.toLowerCase().equals(compareMethod.name.toLowerCase())) {
 
 								thisMethod.isMatched = true;
 
@@ -150,13 +148,14 @@ public class Compare {
 									thisMethod.abstractMatch.isMatched = true;
 								}
 
-								for (String sourceParameter : sourceMethod.parameters) {
+								for (String[] sourceParameter : sourceMethod.parameters) {
 									boolean parameterMatchFound = false;
-									for (String compareParameter : compareMethod.parameters) {
+									for (String[] compareParameter : compareMethod.parameters) {
 
-										if (sourceParameter.toLowerCase().equals(compareParameter.toLowerCase())) {
-
+										if ((sourceParameter[0].toLowerCase().equals(compareParameter[0].toLowerCase())) && 
+												(sourceParameter[1].toLowerCase().equals(compareParameter[1].toLowerCase()))) {
 											thisMethod.matchedParameters.add(sourceParameter);
+											parameterMatchFound = true;
 											break;
 										}
 									}
