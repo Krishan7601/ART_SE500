@@ -11,6 +11,6 @@ public class CompareMethodResult {
 	MatchResult abstractMatch = new MatchResult();
 	MatchResult staticMatch = new MatchResult();
 	MatchResult finalMatch = new MatchResult();
-	List<String[]> matchedParameters = new ArrayList<String[]>();
-	List<String[]> unmatchedParameters = new ArrayList<String[]>();
+	List<String> matchedParameters = new ArrayList<String>();
+	List<String> unmatchedParameters = new ArrayList<String>();
 }

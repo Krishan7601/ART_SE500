@@ -118,7 +118,7 @@ public class JavaExtractor {
 			}
 			NodeList<Parameter> parameterList = md.getParameters();
 			for (Parameter thisParameter : parameterList) {
-				m.addParameter(thisParameter.getElementType().toString(), thisParameter.getName());
+				m.parameters.add(thisParameter.getElementType().toString()+" "+thisParameter.getName());
 				System.out.println(" - PARAMETER - "+thisParameter.getElementType().toString()+" "+thisParameter.getName());
 			}
 		} else if (node instanceof ClassOrInterfaceDeclaration) {

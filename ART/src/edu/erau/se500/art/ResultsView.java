@@ -3,6 +3,7 @@ package edu.erau.se500.art;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -15,6 +16,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
@@ -34,19 +36,22 @@ public class ResultsView extends ViewPart {
 	private SashForm sashForm;
 	
 	private Font tooltipFont;
+	Color redBG;
 
 	public void createPartControl(Composite parent) {
 		mainComposite = parent;
 		parent.setLayout(new FillLayout());
 		sashForm = new SashForm(parent, SWT.VERTICAL);
 
+		tooltipFont = new Font(mainComposite.getDisplay(), new FontData("Consolas", 10, 0));
+		
+		redBG = new Color (mainComposite.getDisplay(), 255, 200, 200);
+		
 		createClassTable();
 		createAttributeTable();
 		createMethodTable();
 
 		sashForm.setWeights(new int[]{2, 1, 1});
-		
-		tooltipFont = new Font(mainComposite.getDisplay(), new FontData("Consolas", 10, 0));
 	}
 
 
@@ -68,10 +73,10 @@ public class ResultsView extends ViewPart {
 				if (r.isMatched) {
 					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
 				} else {
-					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_MAGENTA));
+					cell.setBackground(redBG);
 				}
 				cell.setText(r.name);
-			}			
+			}
 		});
 
 		col = createTableViewerColumn(classTV, titles[1], bounds[1], 1);
@@ -99,13 +104,21 @@ public class ResultsView extends ViewPart {
 		});
 
 		col = createTableViewerColumn(classTV, titles[2], bounds[2], 2);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareClassResult r = (CompareClassResult) element;
-				if (!r.isMatched) return null;
-				if (r.abstractMatch.isMatched) return "Yes";
-				else return "No";
+			public void update(final ViewerCell cell) {
+				CompareClassResult r = (CompareClassResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.abstractMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
@@ -123,13 +136,21 @@ public class ResultsView extends ViewPart {
 		});
 
 		col = createTableViewerColumn(classTV, titles[3], bounds[3], 3);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareClassResult r = (CompareClassResult) element;
-				if (!r.isMatched) return null;
-				if (r.finalMatch.isMatched) return "Yes";
-				else return "No";
+			public void update(final ViewerCell cell) {
+				CompareClassResult r = (CompareClassResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.finalMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
@@ -147,13 +168,21 @@ public class ResultsView extends ViewPart {
 		});
 		
 		col = createTableViewerColumn(classTV, titles[4], bounds[4], 4);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareClassResult r = (CompareClassResult) element;
-				if (!r.isMatched) return null;
-				if (r.parentMatch.isMatched) return "Yes";
-				else return "No";
+			public void update(final ViewerCell cell) {
+				CompareClassResult r = (CompareClassResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.parentMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
@@ -171,12 +200,22 @@ public class ResultsView extends ViewPart {
 		});
 		
 		col = createTableViewerColumn(classTV, titles[5], bounds[5], 5);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareClassResult r = (CompareClassResult) element;
-				if (!r.isMatched) return null;
-				return r.matchedInterfaces.size()+"/"+(r.matchedInterfaces.size()+r.unmatchedInterfaces.size());
+			public void update(final ViewerCell cell) {
+				CompareClassResult r = (CompareClassResult) cell.getElement();
+				if (r.isMatched) {
+					int matched = r.matchedInterfaces.size();
+					int total = r.matchedInterfaces.size()+r.unmatchedInterfaces.size();
+					if (matched == total) {
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setBackground(redBG);
+					}
+					cell.setText(matched+"/"+total);
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
@@ -240,21 +279,29 @@ public class ResultsView extends ViewPart {
 				if (r.isMatched) {
 					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
 				} else {
-					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_MAGENTA));
+					cell.setBackground(redBG);
 				}
 				cell.setText(r.name);
 			}			
 		});
 
 		col = createTableViewerColumn(attributeTV, titles[1], bounds[1], 1);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareAttributeResult r = (CompareAttributeResult) element;
-				if (!r.isMatched) return null;
-				if (r.typeMatch.isMatched) return "Yes";
-				else return "No";
-			}
+			public void update(final ViewerCell cell) {
+				CompareAttributeResult r = (CompareAttributeResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.typeMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
+			}		
 			@Override
 			public String getToolTipText(Object element) {
 				CompareAttributeResult r = (CompareAttributeResult) element;
@@ -271,13 +318,21 @@ public class ResultsView extends ViewPart {
 		});
 
 		col = createTableViewerColumn(attributeTV, titles[2], bounds[2], 2);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareAttributeResult r = (CompareAttributeResult) element;
-				if (!r.isMatched) return null;
-				if (r.accessMatch.isMatched) return "Yes";
-				else return "No";
+			public void update(final ViewerCell cell) {
+				CompareAttributeResult r = (CompareAttributeResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.accessMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
@@ -295,13 +350,21 @@ public class ResultsView extends ViewPart {
 		});
 
 		col = createTableViewerColumn(attributeTV, titles[3], bounds[3], 3);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareAttributeResult r = (CompareAttributeResult) element;
-				if (!r.isMatched) return null;
-				if (r.staticMatch.isMatched) return "Yes";
-				else return "No";
+			public void update(final ViewerCell cell) {
+				CompareAttributeResult r = (CompareAttributeResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.staticMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
@@ -319,13 +382,21 @@ public class ResultsView extends ViewPart {
 		});
 		
 		col = createTableViewerColumn(attributeTV, titles[4], bounds[4], 4);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareAttributeResult r = (CompareAttributeResult) element;
-				if (!r.isMatched) return null;
-				if (r.finalMatch.isMatched) return "Yes";
-				else return "No";
+			public void update(final ViewerCell cell) {
+				CompareAttributeResult r = (CompareAttributeResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.finalMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
@@ -373,21 +444,29 @@ public class ResultsView extends ViewPart {
 				if (r.isMatched) {
 					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
 				} else {
-					cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_MAGENTA));
+					cell.setBackground(redBG);
 				}
 				cell.setText(r.name);
 			}			
 		});
 
 		col = createTableViewerColumn(methodTV, titles[1], bounds[1], 1);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareMethodResult r = (CompareMethodResult) element;
-				if (!r.isMatched) return null;
-				if (r.returnTypeMatch.isMatched) return "Yes";
-				else return "No";
-			}
+			public void update(final ViewerCell cell) {
+				CompareMethodResult r = (CompareMethodResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.returnTypeMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
+			}		
 			@Override
 			public String getToolTipText(Object element) {
 				CompareMethodResult r = (CompareMethodResult) element;
@@ -404,14 +483,22 @@ public class ResultsView extends ViewPart {
 		});
 
 		col = createTableViewerColumn(methodTV, titles[2], bounds[2], 2);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareMethodResult r = (CompareMethodResult) element;
-				if (!r.isMatched) return null;
-				if (r.accessMatch.isMatched) return "Yes";
-				else return "No";
-			}
+			public void update(final ViewerCell cell) {
+				CompareMethodResult r = (CompareMethodResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.accessMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
+			}		
 			@Override
 			public String getToolTipText(Object element) {
 				CompareMethodResult r = (CompareMethodResult) element;
@@ -428,14 +515,22 @@ public class ResultsView extends ViewPart {
 		});
 
 		col = createTableViewerColumn(methodTV, titles[3], bounds[3], 3);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareMethodResult r = (CompareMethodResult) element;
-				if (!r.isMatched) return null;
-				if (r.abstractMatch.isMatched) return "Yes";
-				else return "No";
-			}
+			public void update(final ViewerCell cell) {
+				CompareMethodResult r = (CompareMethodResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.abstractMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
+			}		
 			@Override
 			public String getToolTipText(Object element) {
 				CompareMethodResult r = (CompareMethodResult) element;
@@ -452,14 +547,22 @@ public class ResultsView extends ViewPart {
 		});
 		
 		col = createTableViewerColumn(methodTV, titles[4], bounds[4], 4);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareMethodResult r = (CompareMethodResult) element;
-				if (!r.isMatched) return null;
-				if (r.staticMatch.isMatched) return "Yes";
-				else return "No";
-			}
+			public void update(final ViewerCell cell) {
+				CompareMethodResult r = (CompareMethodResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.staticMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
+			}		
 			@Override
 			public String getToolTipText(Object element) {
 				CompareMethodResult r = (CompareMethodResult) element;
@@ -476,13 +579,21 @@ public class ResultsView extends ViewPart {
 		});
 		
 		col = createTableViewerColumn(methodTV, titles[5], bounds[5], 5);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareMethodResult r = (CompareMethodResult) element;
-				if (!r.isMatched) return null;
-				if (r.finalMatch.isMatched) return "Yes";
-				else return "No";
+			public void update(final ViewerCell cell) {
+				CompareMethodResult r = (CompareMethodResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.finalMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
@@ -500,18 +611,28 @@ public class ResultsView extends ViewPart {
 		});
 		
 		col = createTableViewerColumn(methodTV, titles[6], bounds[6], 6);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareMethodResult r = (CompareMethodResult) element;
-				if (!r.isMatched) return null;
-				return r.matchedParameters.size()+"/"+(r.matchedParameters.size()+r.unmatchedParameters.size());
+			public void update(final ViewerCell cell) {
+				CompareMethodResult r = (CompareMethodResult) cell.getElement();
+				if (r.isMatched) {
+					int matched = r.matchedParameters.size();
+					int total = r.matchedParameters.size()+r.unmatchedParameters.size();
+					if (matched == total) {
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setBackground(redBG);
+					}
+					cell.setText(matched+"/"+total);
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
 				CompareMethodResult r = (CompareMethodResult) element;
 				if (r.isMatched) {
-					return generateTooltipFromListofArrays("Matched", "Unmatched", r.matchedParameters, r.unmatchedParameters);
+					return generateTooltip("Matched", "Unmatched", r.matchedParameters, r.unmatchedParameters);
 				} else {
 					return null;
 				}
@@ -597,18 +718,6 @@ public class ResultsView extends ViewPart {
 		List<String> d2 = new ArrayList<String>();
 		d1.add(data1);
 		d2.add(data2);
-		return generateTooltip(head1, head2, d1, d2);
-	}
-	
-	private String generateTooltipFromListofArrays(String head1, String head2, List<String[]> data1, List<String[]> data2) {
-		List<String> d1 = new ArrayList<String>();
-		List<String> d2 = new ArrayList<String>();
-		for (String[] dataArray : data1) {
-			d1.add(dataArray[0]+" "+dataArray[1]);
-		}
-		for (String[] dataArray : data2) {
-			d2.add(dataArray[0]+" "+dataArray[1]);
-		}
 		return generateTooltip(head1, head2, d1, d2);
 	}
 

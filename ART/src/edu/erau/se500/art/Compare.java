@@ -148,12 +148,11 @@ public class Compare {
 									thisMethod.abstractMatch.isMatched = true;
 								}
 
-								for (String[] sourceParameter : sourceMethod.parameters) {
+								for (String sourceParameter : sourceMethod.parameters) {
 									boolean parameterMatchFound = false;
-									for (String[] compareParameter : compareMethod.parameters) {
+									for (String compareParameter : compareMethod.parameters) {
 
-										if ((sourceParameter[0].toLowerCase().equals(compareParameter[0].toLowerCase())) && 
-												(sourceParameter[1].toLowerCase().equals(compareParameter[1].toLowerCase()))) {
+										if (sourceParameter.toLowerCase().equals(compareParameter.toLowerCase())) {
 											thisMethod.matchedParameters.add(sourceParameter);
 											parameterMatchFound = true;
 											break;
