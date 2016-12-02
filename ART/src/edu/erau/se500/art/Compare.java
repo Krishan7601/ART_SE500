@@ -114,7 +114,10 @@ public class Compare {
 						thisMethod.name = sourceMethod.name;
 						for (ExtractedMethod compareMethod : compareClass.methods) {
 
+							System.out.println("COMPARE: "+sourceMethod.name+" "+compareMethod.name);
+							
 							if (sourceMethod.name.toLowerCase().equals(compareMethod.name.toLowerCase())) {
+								
 
 								thisMethod.isMatched = true;
 
@@ -162,9 +165,9 @@ public class Compare {
 										thisMethod.unmatchedParameters.add(sourceParameter);
 									}
 								}
+								thisResult.methods.add(thisMethod);
+								break;
 							}
-							thisResult.methods.add(thisMethod);
-							break;
 						}
 					}
 					break;
