@@ -26,7 +26,7 @@
 
 [comment code to generate methods/]
 [for (o: Operation | aClass.ownedOperation) separator('\n')] 
-[if (o.visibility.toString().equalsIgnoreCase('package'))][else][o.visibility/][/if] [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]([for(p: Parameter | o.ownedParameter) separator(', ')][p.type.name/] [p.name/][/for]) {} 
+[if (o.visibility.toString().equalsIgnoreCase('package'))][else][o.visibility/][/if] [o.type.name.replaceAll(' ', '')/] [o.name.replaceAll(' ', '')/]() {} 
 [/for]
 
 }
