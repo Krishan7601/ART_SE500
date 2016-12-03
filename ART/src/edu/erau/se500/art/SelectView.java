@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -20,6 +21,8 @@ import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
+
+import com.github.javaparser.ParseProblemException;
 
 public class SelectView extends ViewPart {
 	
@@ -249,8 +252,14 @@ public class SelectView extends ViewPart {
 			g.doGenerate(null);
 			JavaExtractor.fromUML = true;
 			JavaExtractor.collectFiles(genSrcDir);
-		} catch (IOException ex) {
-			ex.printStackTrace();
+		} catch (ParseProblemException e) {
+			MessageBox mb = new MessageBox(mainComposite.getShell(), SWT.ICON_ERROR | SWT.OK);
+			mb.setText("Error parsing generated java");
+			mb.setMessage("A java file generated based on your UML could not be parsed.\n"+JavaExtractor.currentFile+"\n\n"+e.getMessage());
+			mb.open();
+			return;
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -262,6 +271,12 @@ public class SelectView extends ViewPart {
 			} else {
 				JavaExtractor.extractFromFile(javaFile);
 			}
+		} catch (ParseProblemException e) {
+			MessageBox mb = new MessageBox(mainComposite.getShell(), SWT.ICON_ERROR | SWT.OK);
+			mb.setText("Error parsing java source code");
+			mb.setMessage("A java source code file could not be parsed.\n"+JavaExtractor.currentFile+"\n\n"+e.getMessage());
+			mb.open();
+			return;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

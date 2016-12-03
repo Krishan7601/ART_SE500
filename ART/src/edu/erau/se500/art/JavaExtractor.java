@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseProblemException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.NodeList;
@@ -20,8 +21,10 @@ public class JavaExtractor {
 
 	static ExtractedClass c;
 	static boolean fromUML = true;
+	
+	static String currentFile; //used in error message when exception
 
-	static void collectFiles(File directory) throws IOException {
+	static void collectFiles(File directory) throws ParseProblemException, IOException {
 		File[] listOfFiles = directory.listFiles();
 
 		if (listOfFiles != null) {
@@ -35,7 +38,7 @@ public class JavaExtractor {
 		}
 	}
 
-	static void extractFromFile(File javaFile) throws IOException {
+	static void extractFromFile(File javaFile) throws ParseProblemException, IOException {
 		String extension = "";
 		System.out.println(javaFile.getAbsolutePath());
 
@@ -44,6 +47,8 @@ public class JavaExtractor {
 			extension = javaFile.getName().substring(i+1);
 		}
 		if (!extension.equalsIgnoreCase("java")) return; //skip files that are not java
+		
+		currentFile = javaFile.toString(); //used in error message when exception
 
 		FileInputStream in = new FileInputStream(javaFile);
 
