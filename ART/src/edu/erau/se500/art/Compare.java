@@ -3,12 +3,23 @@ package edu.erau.se500.art;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Compare class used to traverse through list of ExtractedClasses and compare data fields within
+ * each object
+ */
 public class Compare {
 
 	static List<ExtractedClass> UMLClasses = new ArrayList<ExtractedClass>();
 	static List<ExtractedClass> javaClasses = new ArrayList<ExtractedClass>();
 	static List<CompareClassResult> results = new ArrayList<CompareClassResult>();
 
+	
+	/** Compare method takes in boolean that decides the order in which ExtractedClasses are compared.
+	 * True: Forward Traceability (compare Java against UML)
+	 * False: Backward Traceability (compare UML against Java)
+	 * @param doForward
+	 */
 	public static void compare(boolean doForward) {
 
 		if (doForward) doCompare(UMLClasses, javaClasses); //forwards
@@ -16,6 +27,12 @@ public class Compare {
 		System.out.println("done compare");
 	}
 
+	/** Depending on doForward boolean, the doCompare() method is executed using different list of ExtractedClasses
+	 * as source classes and compare classes. This method consists of loops used to compare 'compareClasses' against
+	 * 'sourceClasses'.
+	 * @param sourceClasses
+	 * @param compareClasses
+	 */
 	private static void doCompare(List<ExtractedClass> sourceClasses, List<ExtractedClass> compareClasses) {		
 
 		for (ExtractedClass sourceClass : sourceClasses) {
