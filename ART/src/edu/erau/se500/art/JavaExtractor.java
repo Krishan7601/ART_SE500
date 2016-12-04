@@ -101,7 +101,13 @@ public class JavaExtractor {
 			MethodDeclaration md = (MethodDeclaration)node;
 			System.out.println("- method: "+" type: "+md.getType()+" name: "+md.getName()+" AccessModifer"+" isPrivate: "+md.isPrivate()+" isProtected: "+md.isProtected()+" isPublic: "+md.isPublic()+" Non-Accessmodifer:"+" isAbstract: "+md.isAbstract());
 			System.out.println(md.getDeclarationAsString());
-			ExtractedMethod m = new ExtractedMethod(md.getName(), md.getType().toString());
+			
+			//convert invalid return type to void
+			String returnType;
+			if (md.getType().toString().equals("invalid")) returnType = "void";
+			else returnType = md.getType().toString();
+			
+			ExtractedMethod m = new ExtractedMethod(md.getName(), returnType);
 			c.methods.add(m);
 			if(md.isPublic()){
 				m.accessModifier=AccessModifier.PUBLIC;
