@@ -24,6 +24,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import com.github.javaparser.ParseProblemException;
 
+import edu.erau.se500.art.main.Generate;
+
 public class SelectView extends ViewPart {
 	
 	public static final String ID = "edu.erau.se500.art.SelectView";
@@ -258,8 +260,11 @@ public class SelectView extends ViewPart {
 			mb.setMessage("A java file generated based on your UML could not be parsed.\n"+JavaExtractor.currentFile+"\n\n"+e.getMessage());
 			mb.open();
 			return;
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			MessageBox mb = new MessageBox(mainComposite.getShell(), SWT.ICON_ERROR | SWT.OK);
+			mb.setText("Exception during parseUML");
+			mb.setMessage(e.getMessage());
+			mb.open();
 		}
 	}
 	

@@ -8,7 +8,7 @@
  * Contributors:
  *     Obeo - initial API and implementation
  *******************************************************************************/
-package edu.erau.se500.art;
+package edu.erau.se500.art.main;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class Generate extends AbstractAcceleoGenerator {
      *
      * @generated
      */
-    public static final String MODULE_FILE_NAME = "/edu/erau/se500/art/generate";
+    public static final String MODULE_FILE_NAME = "/edu/erau/se500/art/main/generate";
     
     /**
      * The name of the templates that are to be generated.
