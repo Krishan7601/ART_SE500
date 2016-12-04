@@ -3,7 +3,6 @@ package edu.erau.se500.art;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -36,7 +35,7 @@ public class ResultsView extends ViewPart {
 	private SashForm sashForm;
 	
 	private Font tooltipFont;
-	Color redBG;
+	private Color redBG;
 
 	public void createPartControl(Composite parent) {
 		mainComposite = parent;
@@ -724,6 +723,5 @@ public class ResultsView extends ViewPart {
 	public void setFocus() {
 		mainComposite.setFocus();
 		classTV.refresh();
-		//TODO: refresh other tables
 	}
 }

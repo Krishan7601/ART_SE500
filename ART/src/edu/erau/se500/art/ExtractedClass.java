@@ -3,8 +3,9 @@ package edu.erau.se500.art;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExtractedClass extends ExtractedMethod {
+public class ExtractedClass extends ExtractedAttribute {
 	String parentClass;
+	boolean isAbstract;
 
 	List<String> interfaceClasses = new ArrayList<String>();
 
@@ -14,6 +15,7 @@ public class ExtractedClass extends ExtractedMethod {
 	ExtractedClass(String name) {
 		super(name, null);
 		parentClass = null;
+		isAbstract = false;
 		interfaceClasses = new ArrayList<String>();
 		attributes = new ArrayList<ExtractedAttribute>();
 		methods = new ArrayList<ExtractedMethod>();
