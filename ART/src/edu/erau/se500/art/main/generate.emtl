@@ -289,11 +289,31 @@
             <loopVariable name="p">
               <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Parameter"/>
             </loopVariable>
-            <iterSet xsi:type="ocl.ecore:PropertyCallExp" eType="/11/OrderedSet(Parameter)">
-              <source xsi:type="ocl.ecore:VariableExp" name="o" referredVariable="/0/generate/%.1/%.11/o">
-                <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Operation"/>
+            <iterSet xsi:type="ocl.ecore:IteratorExp" name="select" eType="/11/OrderedSet(Parameter)">
+              <source xsi:type="ocl.ecore:PropertyCallExp" eType="/11/OrderedSet(Parameter)">
+                <source xsi:type="ocl.ecore:VariableExp" name="o" referredVariable="/0/generate/%.1/%.11/o">
+                  <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Operation"/>
+                </source>
+                <referredProperty xsi:type="ecore:EReference" href="http://www.eclipse.org/uml2/5.0.0/UML#//BehavioralFeature/ownedParameter"/>
               </source>
-              <referredProperty xsi:type="ecore:EReference" href="http://www.eclipse.org/uml2/5.0.0/UML#//BehavioralFeature/ownedParameter"/>
+              <body xsi:type="ocl.ecore:OperationCallExp">
+                <eType xsi:type="ocl.ecore:PrimitiveType" href="http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore#/0/Boolean"/>
+                <source xsi:type="ocl.ecore:PropertyCallExp">
+                  <eType xsi:type="ecore:EEnum" href="http://www.eclipse.org/uml2/5.0.0/UML#//ParameterDirectionKind"/>
+                  <source xsi:type="ocl.ecore:VariableExp" name="param" referredVariable="/0/generate/%.1/%.11/%.6/select/param">
+                    <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Parameter"/>
+                  </source>
+                  <referredProperty xsi:type="ecore:EAttribute" href="http://www.eclipse.org/uml2/5.0.0/UML#//Parameter/direction"/>
+                </source>
+                <argument xsi:type="ocl.ecore:EnumLiteralExp">
+                  <eType xsi:type="ecore:EEnum" href="http://www.eclipse.org/uml2/5.0.0/UML#//ParameterDirectionKind"/>
+                  <referredEnumLiteral xsi:type="ecore:EEnumLiteral" href="http://www.eclipse.org/uml2/5.0.0/UML#//ParameterDirectionKind/in"/>
+                </argument>
+                <referredOperation xsi:type="ecore:EOperation" href="http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore#/0/OclAny_Class/="/>
+              </body>
+              <iterator xsi:type="ocl.ecore:Variable" name="param">
+                <eType xsi:type="ecore:EClass" href="http://www.eclipse.org/uml2/5.0.0/UML#//Parameter"/>
+              </iterator>
             </iterSet>
             <each xsi:type="ocl.ecore:StringLiteralExp" stringSymbol=", ">
               <eType xsi:type="ocl.ecore:PrimitiveType" href="http://www.eclipse.org/ocl/1.1.0/oclstdlib.ecore#/0/String"/>
@@ -587,7 +607,7 @@
   <ecore:EAnnotation source="positions">
     <eAnnotations source="positions.0" references="/0/generate">
       <details key="start" value="89"/>
-      <details key="end" value="1295"/>
+      <details key="end" value="1370"/>
       <details key="line" value="4"/>
     </eAnnotations>
     <eAnnotations source="positions.1" references="/0/generate/%">
@@ -597,7 +617,7 @@
     </eAnnotations>
     <eAnnotations source="positions.2" references="/0/generate/%.1">
       <details key="start" value="186"/>
-      <details key="end" value="1282"/>
+      <details key="end" value="1357"/>
       <details key="line" value="8"/>
     </eAnnotations>
     <eAnnotations source="positions.3" references="/0/generate/%.1/%">
@@ -957,7 +977,7 @@
     </eAnnotations>
     <eAnnotations source="positions.74" references="/0/generate/%.1/%.11">
       <details key="start" value="963"/>
-      <details key="end" value="1271"/>
+      <details key="end" value="1346"/>
       <details key="line" value="28"/>
     </eAnnotations>
     <eAnnotations source="positions.75" references="/0/generate/%.1/%.11/%">
@@ -1077,37 +1097,37 @@
     </eAnnotations>
     <eAnnotations source="positions.98" references="/0/generate/%.1/%.11/%.6">
       <details key="start" value="1175"/>
-      <details key="end" value="1259"/>
+      <details key="end" value="1334"/>
       <details key="line" value="29"/>
     </eAnnotations>
     <eAnnotations source="positions.99" references="/0/generate/%.1/%.11/%.6/%">
-      <details key="start" value="1230"/>
-      <details key="end" value="1241"/>
+      <details key="start" value="1305"/>
+      <details key="end" value="1316"/>
       <details key="line" value="0"/>
     </eAnnotations>
     <eAnnotations source="positions.100" references="/0/generate/%.1/%.11/%.6/%/%">
-      <details key="start" value="1230"/>
-      <details key="end" value="1236"/>
+      <details key="start" value="1305"/>
+      <details key="end" value="1311"/>
       <details key="line" value="0"/>
     </eAnnotations>
     <eAnnotations source="positions.101" references="/0/generate/%.1/%.11/%.6/%/%/p">
-      <details key="start" value="1230"/>
-      <details key="end" value="1231"/>
+      <details key="start" value="1305"/>
+      <details key="end" value="1306"/>
       <details key="line" value="0"/>
     </eAnnotations>
     <eAnnotations source="positions.102" references="/0/generate/%.1/%.11/%.6/%.1">
-      <details key="start" value="1243"/>
-      <details key="end" value="1244"/>
+      <details key="start" value="1318"/>
+      <details key="end" value="1319"/>
       <details key="line" value="29"/>
     </eAnnotations>
     <eAnnotations source="positions.103" references="/0/generate/%.1/%.11/%.6/%.2">
-      <details key="start" value="1245"/>
-      <details key="end" value="1251"/>
+      <details key="start" value="1320"/>
+      <details key="end" value="1326"/>
       <details key="line" value="0"/>
     </eAnnotations>
     <eAnnotations source="positions.104" references="/0/generate/%.1/%.11/%.6/%.2/p">
-      <details key="start" value="1245"/>
-      <details key="end" value="1246"/>
+      <details key="start" value="1320"/>
+      <details key="end" value="1321"/>
       <details key="line" value="0"/>
     </eAnnotations>
     <eAnnotations source="positions.105" references="/0/generate/%.1/%.11/%.6/p">
@@ -1115,82 +1135,112 @@
       <details key="end" value="1192"/>
       <details key="line" value="29"/>
     </eAnnotations>
-    <eAnnotations source="positions.106" references="/0/generate/%.1/%.11/%.6/%.3">
+    <eAnnotations source="positions.106" references="/0/generate/%.1/%.11/%.6/select">
+      <details key="start" value="1195"/>
+      <details key="end" value="1286"/>
+      <details key="line" value="0"/>
+    </eAnnotations>
+    <eAnnotations source="positions.107" references="/0/generate/%.1/%.11/%.6/select/%">
       <details key="start" value="1195"/>
       <details key="end" value="1211"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.107" references="/0/generate/%.1/%.11/%.6/%.3/o">
+    <eAnnotations source="positions.108" references="/0/generate/%.1/%.11/%.6/select/%/o">
       <details key="start" value="1195"/>
       <details key="end" value="1196"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.108" references="/0/generate/%.1/%.11/%.6/%.4">
-      <details key="start" value="1223"/>
-      <details key="end" value="1227"/>
+    <eAnnotations source="positions.109" references="/0/generate/%.1/%.11/%.6/select/%.1">
+      <details key="start" value="1240"/>
+      <details key="end" value="1285"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.109" references="/0/generate/%.1/%.11/%.7">
-      <details key="start" value="1259"/>
-      <details key="end" value="1265"/>
+    <eAnnotations source="positions.110" references="/0/generate/%.1/%.11/%.6/select/%.1/%">
+      <details key="start" value="1240"/>
+      <details key="end" value="1255"/>
+      <details key="line" value="0"/>
+    </eAnnotations>
+    <eAnnotations source="positions.111" references="/0/generate/%.1/%.11/%.6/select/%.1/%/param">
+      <details key="start" value="1240"/>
+      <details key="end" value="1245"/>
+      <details key="line" value="0"/>
+    </eAnnotations>
+    <eAnnotations source="positions.112" references="/0/generate/%.1/%.11/%.6/select/%.1/%.1">
+      <details key="start" value="1258"/>
+      <details key="end" value="1285"/>
+      <details key="line" value="0"/>
+    </eAnnotations>
+    <eAnnotations source="positions.113" references="/0/generate/%.1/%.11/%.6/select/param">
+      <details key="start" value="1220"/>
+      <details key="end" value="1237"/>
+      <details key="line" value="0"/>
+    </eAnnotations>
+    <eAnnotations source="positions.114" references="/0/generate/%.1/%.11/%.6/%.3">
+      <details key="start" value="1298"/>
+      <details key="end" value="1302"/>
+      <details key="line" value="0"/>
+    </eAnnotations>
+    <eAnnotations source="positions.115" references="/0/generate/%.1/%.11/%.7">
+      <details key="start" value="1334"/>
+      <details key="end" value="1340"/>
       <details key="line" value="29"/>
     </eAnnotations>
-    <eAnnotations source="positions.110" references="/0/generate/%.1/%.11/o">
+    <eAnnotations source="positions.116" references="/0/generate/%.1/%.11/o">
       <details key="start" value="969"/>
       <details key="end" value="981"/>
       <details key="line" value="28"/>
     </eAnnotations>
-    <eAnnotations source="positions.111" references="/0/generate/%.1/%.11/%.8">
+    <eAnnotations source="positions.117" references="/0/generate/%.1/%.11/%.8">
       <details key="start" value="984"/>
       <details key="end" value="1005"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.112" references="/0/generate/%.1/%.11/%.8/aClass">
+    <eAnnotations source="positions.118" references="/0/generate/%.1/%.11/%.8/aClass">
       <details key="start" value="984"/>
       <details key="end" value="990"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.113" references="/0/generate/%.1/%.11/%.9">
+    <eAnnotations source="positions.119" references="/0/generate/%.1/%.11/%.9">
       <details key="start" value="1017"/>
       <details key="end" value="1021"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.114" references="/0/generate/%.1/%.12">
-      <details key="start" value="1272"/>
-      <details key="end" value="1275"/>
+    <eAnnotations source="positions.120" references="/0/generate/%.1/%.12">
+      <details key="start" value="1347"/>
+      <details key="end" value="1350"/>
       <details key="line" value="31"/>
     </eAnnotations>
-    <eAnnotations source="positions.115" references="/0/generate/%.1/%.13">
+    <eAnnotations source="positions.121" references="/0/generate/%.1/%.13">
       <details key="start" value="193"/>
       <details key="end" value="235"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.116" references="/0/generate/%.1/%.13/%">
+    <eAnnotations source="positions.122" references="/0/generate/%.1/%.13/%">
       <details key="start" value="193"/>
       <details key="end" value="219"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.117" references="/0/generate/%.1/%.13/%/%">
+    <eAnnotations source="positions.123" references="/0/generate/%.1/%.13/%/%">
       <details key="start" value="193"/>
       <details key="end" value="204"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.118" references="/0/generate/%.1/%.13/%/%/aClass">
+    <eAnnotations source="positions.124" references="/0/generate/%.1/%.13/%/%/aClass">
       <details key="start" value="193"/>
       <details key="end" value="199"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.119" references="/0/generate/%.1/%.13/%.1">
+    <eAnnotations source="positions.125" references="/0/generate/%.1/%.13/%.1">
       <details key="start" value="227"/>
       <details key="end" value="234"/>
       <details key="line" value="0"/>
     </eAnnotations>
-    <eAnnotations source="positions.120" references="/0/generate/%.2">
-      <details key="start" value="1283"/>
-      <details key="end" value="1284"/>
+    <eAnnotations source="positions.126" references="/0/generate/%.2">
+      <details key="start" value="1358"/>
+      <details key="end" value="1359"/>
       <details key="line" value="34"/>
     </eAnnotations>
-    <eAnnotations source="positions.121" references="/0/generate/aClass">
+    <eAnnotations source="positions.127" references="/0/generate/aClass">
       <details key="start" value="115"/>
       <details key="end" value="129"/>
       <details key="line" value="4"/>
