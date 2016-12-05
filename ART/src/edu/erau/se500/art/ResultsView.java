@@ -79,13 +79,21 @@ public class ResultsView extends ViewPart {
 		});
 
 		col = createTableViewerColumn(classTV, titles[1], bounds[1], 1);
-		col.setLabelProvider(new ColumnLabelProvider() {
+		col.setLabelProvider(new StyledCellLabelProvider() {
 			@Override
-			public String getText(Object element) {
-				CompareClassResult r = (CompareClassResult) element;
-				if (!r.isMatched) return null;
-				if (r.accessMatch.isMatched) return "Yes";
-				else return "No";
+			public void update(final ViewerCell cell) {
+				CompareClassResult r = (CompareClassResult) cell.getElement();
+				if (r.isMatched) {
+					if (r.accessMatch.isMatched) {
+						cell.setText("Matched");
+						cell.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_TRANSPARENT));
+					} else {
+						cell.setText("Not Matched");
+						cell.setBackground(redBG);
+					}
+				} else {
+					cell.setText(null);
+				}
 			}
 			@Override
 			public String getToolTipText(Object element) {
