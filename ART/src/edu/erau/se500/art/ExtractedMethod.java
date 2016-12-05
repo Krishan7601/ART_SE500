@@ -4,19 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ExtractedMethod class constructs object that stores details of methods extracted from source class 
+ * constructs object that stores details of methods extracted from source class 
  * or compare class. Extends ExtractedAttribute to hold all same fields as ExtractedAttibute.
  */
 public class ExtractedMethod extends ExtractedAttribute {
+	
 	/**
-	 * parameters stores list of names of parameters associated with this method
+	 * list of names of parameters associated with this method
 	 */
 	List<String> parameters;
+	
 	/**
-	 * isAbstract stores boolean, true if attribute is abstract 
+	 * boolean, true if attribute is abstract, false if not
 	 */
 	boolean isAbstract;
 	
+	
+	/** Constructor
+	 * @param name - name of the method
+	 * @param type - return type of the method
+	 */
 	ExtractedMethod(String name, String type) {
 		super(name, type);
 		parameters = new ArrayList<String>();

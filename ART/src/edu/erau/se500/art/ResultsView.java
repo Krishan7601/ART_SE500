@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -26,17 +25,43 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.part.ViewPart;
 
+/**
+ * Eclipse view to display the results of the traceability computation
+ */
 public class ResultsView extends ViewPart {
 
+	/**
+	 * Unique identifier of this view in case it needs to be referenced.
+	 */
 	public static final String ID = "edu.erau.se500.art.ResultsView";
 
+	/**
+	 * Reference to the parent Composite that contains the UI elements of this view
+	 */
 	Composite mainComposite;
+	
+	/**
+	 * References to the TableViewers that display the results for classes, attributes, and methods 
+	 */
 	private TableViewer classTV, attributeTV, methodTV;
+	/**
+	 * Reference to the UI element that allows the tables to be stacked on top of each other and resizeable.
+	 */
 	private SashForm sashForm;
 	
+	/**
+	 * Font to style the tooltips with a monospace font to allow the text to line up
+	 */
 	private Font tooltipFont;
+	
+	/**
+	 * Red (pink) background color of table cells where there is no matchh 
+	 */
 	private Color redBG;
 
+	/** 
+	 * Generates the GUI for the view. Calls other methods to create the tables
+	 */
 	public void createPartControl(Composite parent) {
 		mainComposite = parent;
 		parent.setLayout(new FillLayout());
@@ -53,9 +78,9 @@ public class ResultsView extends ViewPart {
 		sashForm.setWeights(new int[]{2, 1, 1});
 	}
 
-
-
-	// create the columns for the class table
+	/**
+	 * Creates the tableviewer for the class results
+	 */
 	private void createClassTable() {
 		classTV = new TableViewer(sashForm, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		
@@ -269,7 +294,9 @@ public class ResultsView extends ViewPart {
 		classTV.getControl().setLayoutData(classGridData);
 	}
 
-	// create the attribute table
+	/**
+	 * Creates the tableviewer for the attribute results
+	 */
 	private void createAttributeTable() {
 		attributeTV = new TableViewer(sashForm, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		
@@ -435,6 +462,9 @@ public class ResultsView extends ViewPart {
 		attributeTV.getControl().setLayoutData(attributeGridData);
 	}
 
+	/**
+	 * Creates the tableviewer for the method results
+	 */
 	private void createMethodTable() {
 		methodTV = new TableViewer(sashForm, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
 		
@@ -665,6 +695,13 @@ public class ResultsView extends ViewPart {
 		methodTV.getControl().setLayoutData(methodGridData);
 	}
 
+	/** Generic method that creates a column for each table
+	 * @param thisViewer - The tableviewer that the new column is assigned to
+	 * @param title - The label in the header of the column
+	 * @param bound - The width of the column in pixels
+	 * @param colNumber - The index of the column to indicate the order
+	 * @return
+	 */
 	private TableViewerColumn createTableViewerColumn(TableViewer thisViewer, String title, int bound, final int colNumber) {
 		final TableViewerColumn viewerColumn = new TableViewerColumn(thisViewer,SWT.NONE);
 		final TableColumn column = viewerColumn.getColumn();
@@ -675,6 +712,13 @@ public class ResultsView extends ViewPart {
 		return viewerColumn;
 	}
 	
+	/** Generates formatted text to display the tooltip for a specific tableviewer cell
+	 * @param head1 - The label for the left column
+	 * @param head2 - The label for the right column
+	 * @param data1 - The list of elements to display in the left column
+	 * @param data2 - The list of elements to display in the right column
+	 * @return
+	 */
 	private String generateTooltip(String head1, String head2, List<String> data1, List<String> data2) {
 		StringBuilder sb = new StringBuilder();
 		
@@ -720,6 +764,14 @@ public class ResultsView extends ViewPart {
 		return sb.toString();
 	}
 	
+	/** Generates formatted text to display the tooltip for a specific tableviewer cell 
+	 * when only one element is displayed on left and right sides
+	 * @param head1 - Label for left column
+	 * @param head2 - Label for right column
+	 * @param data1 - Data for left column
+	 * @param data2 - Data for right column
+	 * @return
+	 */
 	private String generateTooltip(String head1, String head2, String data1, String data2) {
 		List<String> d1 = new ArrayList<String>();
 		List<String> d2 = new ArrayList<String>();
@@ -728,6 +780,10 @@ public class ResultsView extends ViewPart {
 		return generateTooltip(head1, head2, d1, d2);
 	}
 
+	
+	/**
+	 * Sets focus to the view and refreshes the class table with any updates
+	 */
 	public void setFocus() {
 		mainComposite.setFocus();
 		classTV.refresh();

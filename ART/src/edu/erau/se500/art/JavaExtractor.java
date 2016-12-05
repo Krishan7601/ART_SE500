@@ -17,13 +17,33 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
+/**
+ * Pulls the pertinent data out of a java class file and stores them in one of two ArrayLists
+ *
+ */
 public class JavaExtractor {
 
-	static ExtractedClass c;
+	/**
+	 * A reference to the current ExtractedClass object that the data is getting saved to
+	 */
+	private static ExtractedClass c;
+	
+	
+	/**
+	 * Boolean stating whether the java file was generated from a uml diagram, or if it is instead just source code
+	 */
 	static boolean fromUML = true;
 	
-	static String currentFile; //used in error message when exception
+	/**
+	 * A reference to the current java file. To be used for error message popups.
+	 */
+	static String currentFile;
 
+	/** Recursively iterates through all the files and subfolders of a specific folder to call the extract method for each file
+	 * @param directory - The directory that is being scanned for files
+	 * @throws ParseProblemException - Parser could not parse the file
+	 * @throws IOException - Generic file errors
+	 */
 	static void collectFiles(File directory) throws ParseProblemException, IOException {
 		File[] listOfFiles = directory.listFiles();
 
@@ -38,6 +58,12 @@ public class JavaExtractor {
 		}
 	}
 
+	/** Opens the file to be read by the parser. Generates a tree structure of data. Calls process method to extract 
+	 * the class, attributes, and methods out of the file given and saves to an ArrayList, depending on if it was from UML or not.
+	 * @param javaFile - the file that the data is getting extracted from
+	 * @throws ParseProblemException - Parser could not parse the file
+	 * @throws IOException - Generic file errors
+	 */
 	static void extractFromFile(File javaFile) throws ParseProblemException, IOException {
 		String extension = "";
 		System.out.println(javaFile.getAbsolutePath());
@@ -72,6 +98,9 @@ public class JavaExtractor {
 		}
 	}
 
+	/** Recursive process to extract data from each node of the data tree. saves the data to an ExtractedClass object
+	 * @param node - the current node being processed
+	 */
 	private static void processNode(Node node) {
 		if (node instanceof FieldDeclaration) {
 			FieldDeclaration fd = (FieldDeclaration)node;

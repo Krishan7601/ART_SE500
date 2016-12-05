@@ -8,40 +8,49 @@ import java.util.List;
  * from ExtractedClasses object
  */
 public class CompareMethodResult {
+	
 	/**
-	 * name is Name of method
+	 * Name of method
 	 */
 	String name;
+	
 	/**
-	 * isMatched is Boolean stating if method name is found in UML model and also Java Source Code
+	 * Boolean stating if method name is found in UML model and also Java Source Code
 	 */
 	boolean isMatched = false;
+	
 	/**
-	 * returnTypeMatch is MatchedResult object to store typeMatch details of method's return data type
+	 * MatchedResult object to store typeMatch details of method's return data type
 	 */
 	MatchResult returnTypeMatch = new MatchResult();
+	
 	/**
-	 * accessMatch is MatchedResult object to store accessMatch details of method access modifier
+	 * MatchedResult object to store accessMatch details of method access modifier
 	 */
 	MatchResult accessMatch = new MatchResult();
+	
 	/**
-	 * abstractMatch is MatchedResult object to store staticMatch details if method is or isn't abstract
+	 * MatchedResult object to store staticMatch details if method is or isn't abstract
 	 */
 	MatchResult abstractMatch = new MatchResult();
+	
 	/**
-	 * staticMatch is MatchedResult object to store staticMatch details if method is or isn't static
+	 * MatchedResult object to store staticMatch details if method is or isn't static
 	 */
 	MatchResult staticMatch = new MatchResult();
+	
 	/**
-	 * finalMatch is MatchedResult object to store finalMatch details if method is or isn't final
+	 * MatchedResult object to store finalMatch details if method is or isn't final
 	 */
 	MatchResult finalMatch = new MatchResult();
+	
 	/**
-	 * matchedParameter is list of parameter names that are associated with the method and matched
+	 * list of parameter names that are associated with the method and matched
 	 */
 	List<String> matchedParameters = new ArrayList<String>();
+	
 	/**
-	 * unmatchedParameter is list of parameter names that are associated with the method and are not matched
+	 * list of parameter names that are associated with the method and are not matched
 	 */
 	List<String> unmatchedParameters = new ArrayList<String>();
 }

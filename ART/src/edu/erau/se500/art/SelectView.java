@@ -26,17 +26,49 @@ import com.github.javaparser.ParseProblemException;
 
 import edu.erau.se500.art.main.Generate;
 
+/**
+ * Eclipse view for the user to select their files and options for the traceability calculation
+ */
 public class SelectView extends ViewPart {
 	
+	/**
+	 * Unique identifier for this view
+	 */
 	public static final String ID = "edu.erau.se500.art.SelectView";
 	
+	/**
+	 * Reference to the parent Composite object that contains the UI elements of this view
+	 */
 	Composite mainComposite;
+	
+	/**
+	 * References to the files/directories that the user selected for their traceability
+	 */
 	File umlFile, javaFile, projectDirectory;
+	
+	/**
+	 * Radio buttons to toggle between using a project or single file for the source code 
+	 */
 	Button btnProjectRadio, btnSingleRadio;
+	
+	/**
+	 * Labels to display the file paths of the uml and source code 
+	 */
 	Label lblFilenameProject, lblFilenameSingle;
+	
+	/**
+	 * Buttons that open file chooser windows to select files
+	 */
 	Button btnBrowseProject, btnBrowseSingle;
+	
+	/**
+	 * Radio muttons to toggle between forward and backward traceability 
+	 */
 	Button btnForwardRadio, btnBackwardRadio;
 	
+	/**
+	 * Create GUI for the view
+	 */
 	public void createPartControl(Composite parent) {
 		
 		mainComposite = parent;
@@ -226,6 +258,10 @@ public class SelectView extends ViewPart {
 		});
 	}
 	
+	/** Overall method that performs the traceability through other methods
+	 * @param doProject - Whether or not the user selected a project (false = single file)
+	 * @param doForward - Whether or not forward traceability was selected (false = backward) 
+	 */
 	private void computeTraceability(boolean doProject, boolean doForward) {
 		//erase previous results
 		Compare.UMLClasses.clear();
@@ -239,6 +275,9 @@ public class SelectView extends ViewPart {
 		showResultsView();
 	}
 	
+	/**
+	 * Takes the UML diagram and generates java code from it using acceleo plug-in.
+	 */
 	private void parseUML() {
 		File genSrcDir = new File(System.getProperty("user.dir")+File.separator+"src-gen");
 		System.out.println(genSrcDir.getAbsolutePath());
@@ -268,6 +307,9 @@ public class SelectView extends ViewPart {
 		}
 	}
 	
+	/** Extracts the data out of the java files through the JavaExtractor class
+	 * @param doProject - whether ot not a project was selected as source code (false = single file)
+	 */
 	private void parseJava(boolean doProject) {
 		try {
 			JavaExtractor.fromUML = false;
@@ -287,6 +329,9 @@ public class SelectView extends ViewPart {
 		}
 	}
 	
+	/**
+	 * Opens the results view
+	 */
 	private void showResultsView() {
 		IViewPart resultsView = getResultsView();
 		if (resultsView != null) {
@@ -294,6 +339,10 @@ public class SelectView extends ViewPart {
 			resultsView.setFocus(); //triggers table results to refresh
 		}
 	}
+	
+	/** Updates the UI by disabling certain elements depending on whether user chose project or single file for source code
+	 * @param source - The button that they clicked to trigger the action
+	 */
 	private void radioSourceSelectionChanged(Button source) {
 		if (source == btnProjectRadio) {
 			if (projectDirectory != null) lblFilenameProject.setEnabled(true); //don't enable unless directory selected
@@ -308,6 +357,9 @@ public class SelectView extends ViewPart {
 		}
 	}
 	
+	/** Deletes all files in the selected folder
+	 * @param thisDir - the folder chosen to empty
+	 */
 	private void emptyDirectory(File thisDir) {
 		File[] listOfFiles = thisDir.listFiles();
 
@@ -321,6 +373,9 @@ public class SelectView extends ViewPart {
 	    }
 	}
 	
+	/** Creates reference to the ResultsView view
+	 * @return
+	 */
 	private IViewPart getResultsView() {
 		IWorkbenchPage page = getSite().getPage();
 		IViewPart resultsView = page.findView("edu.erau.se500.art.ResultsView");
@@ -334,6 +389,9 @@ public class SelectView extends ViewPart {
 		return resultsView;
 	}
 	
+	/**
+	 * Sets focus to the view
+	 */
 	public void setFocus() {
 		mainComposite.setFocus();
 	}
