@@ -129,10 +129,10 @@ public class Compare {
 									thisAttribute.staticMatch.isMatched = true;
 								}
 
-								thisResult.attributes.add(thisAttribute);
 								break;
 							}
 						}
+						thisResult.attributes.add(thisAttribute);
 					}
 
 					for (ExtractedMethod sourceMethod : sourceClass.methods) {
@@ -144,7 +144,6 @@ public class Compare {
 							
 							if (sourceMethod.name.toLowerCase().equals(compareMethod.name.toLowerCase())) {
 								
-
 								thisMethod.isMatched = true;
 
 								thisMethod.returnTypeMatch.sourceValue = sourceMethod.type;
@@ -191,10 +190,10 @@ public class Compare {
 										thisMethod.unmatchedParameters.add(sourceParameter);
 									}
 								}
-								thisResult.methods.add(thisMethod);
 								break;
 							}
 						}
+						thisResult.methods.add(thisMethod);
 					}
 					break;
 				}
