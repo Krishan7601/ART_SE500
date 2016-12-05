@@ -10,8 +10,17 @@ import java.util.List;
  */
 public class Compare {
 
+	/**
+	 * List of ExtractedClasses taken from UML Model
+	 */
 	static List<ExtractedClass> UMLClasses = new ArrayList<ExtractedClass>();
+	/**
+	 * List of ExtractedClasses taken from Java Source Code
+	 */
 	static List<ExtractedClass> javaClasses = new ArrayList<ExtractedClass>();
+	/**
+	 * List of CompareClassResult objects to store matched and unmatched fields
+	 */
 	static List<CompareClassResult> results = new ArrayList<CompareClassResult>();
 
 	
